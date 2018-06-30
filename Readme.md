@@ -8,8 +8,11 @@
 	- url : https://github.com/kunny/kunny-kotlin-book
 
 ## 주제
-	- 1. Dagger
-	- 2. Test
-	- 3. Constraint Layout
-	- 4. Corutines
-	- 5. Clean Architecture
+	- 1. Constraint Layout
+	- 2. Motion Layout
+	- 3. Dagger
+	- 4. Clean Architecture
+	- 5. MVVM
+	- 6. Kotlin Corutines
+	- 7. Android KTX
+	- 8. Test
