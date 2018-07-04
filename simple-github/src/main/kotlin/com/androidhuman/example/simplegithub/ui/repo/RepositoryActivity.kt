@@ -117,7 +117,8 @@ class RepositoryActivity : AppCompatActivity() {
     }
 
     private fun setContentVisibility(show: Boolean) {
-        llActivityRepositoryContent.visibility = if (show) View.VISIBLE else View.GONE
+
+        grpActivityRepositoryContent.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     private fun showError(message: String) {
