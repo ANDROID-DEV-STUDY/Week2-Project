@@ -55,6 +55,13 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation "com.android.support.constraint:constraint-layout:$constraintLayoutVersion"
 
+    implementation "com.google.dagger:dagger:$daggerVersion"
+    implementation "com.google.dagger:dagger-android:$daggerVersion"
+    implementation "com.google.dagger:dagger-android-support:$daggerVersion"
+
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+    kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
+
     kapt "android.arch.lifecycle:compiler:$archComponentVersion"
     kapt "android.arch.persistence.room:compiler:$archComponentVersion"
     kapt "com.github.bumptech.glide:compiler:$glideVersion"

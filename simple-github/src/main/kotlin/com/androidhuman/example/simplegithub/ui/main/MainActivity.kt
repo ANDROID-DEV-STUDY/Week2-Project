@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import com.androidhuman.example.simplegithub.R
 import com.androidhuman.example.simplegithub.api.model.GithubRepo
+import com.androidhuman.example.simplegithub.data.SearchHistoryDao
 import com.androidhuman.example.simplegithub.data.provideSearchHistoryDao
 import com.androidhuman.example.simplegithub.extensions.plusAssign
 import com.androidhuman.example.simplegithub.rx.AutoActivatedDisposable
@@ -16,26 +17,27 @@ import com.androidhuman.example.simplegithub.rx.AutoClearedDisposable
 import com.androidhuman.example.simplegithub.ui.repo.RepositoryActivity
 import com.androidhuman.example.simplegithub.ui.search.SearchActivity
 import com.androidhuman.example.simplegithub.ui.search.SearchAdapter
+import dagger.android.support.DaggerAppCompatActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.startActivity
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), SearchAdapter.ItemClickListener {
-
-    internal val adapter by lazy {
-        SearchAdapter().apply { setItemClickListener(this@MainActivity) }
-    }
+class MainActivity : DaggerAppCompatActivity(), SearchAdapter.ItemClickListener {
 
     internal val disposables = AutoClearedDisposable(this)
 
     internal val viewDisposables
             = AutoClearedDisposable(lifecycleOwner = this, alwaysClearOnStop = false)
 
-    internal val viewModelFactory
-            by lazy { MainViewModelFactory(provideSearchHistoryDao(this)) }
+    @Inject lateinit var adapter: SearchAdapter
+
+    @Inject lateinit var viewModelFactory: MainViewModelFactory
 
     lateinit var viewModel: MainViewModel
+
+    @Inject lateinit var searchHistoryDao: SearchHistoryDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

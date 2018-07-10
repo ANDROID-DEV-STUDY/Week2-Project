@@ -9,30 +9,43 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.androidhuman.example.simplegithub.BuildConfig
 import com.androidhuman.example.simplegithub.R
+import com.androidhuman.example.simplegithub.api.AuthApi
 import com.androidhuman.example.simplegithub.api.provideAuthApi
 import com.androidhuman.example.simplegithub.data.AuthTokenProvider
 import com.androidhuman.example.simplegithub.extensions.plusAssign
 import com.androidhuman.example.simplegithub.rx.AutoClearedDisposable
 import com.androidhuman.example.simplegithub.ui.main.MainActivity
+import dagger.android.support.DaggerAppCompatActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_sign_in.*
 import org.jetbrains.anko.clearTask
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.newTask
+import javax.inject.Inject
 
-class SignInActivity : AppCompatActivity() {
+// 실행
+// 1. 객체 주입을 위해 상속을 DaggerAppCompatActivity 로 변경
+// 2. AuthApi 와 AuthTokenProvider 를 대거를 통해 주입받도록 별도의 프로퍼티 선언
+// 3. 생성한 프로퍼티를 뷰모델 팩토리 생성자의 인자로 전달
+// 4. 뷰모델 펙토리에 직접 inject 받도록 다시 리펙토링
+
+class SignInActivity : DaggerAppCompatActivity() { // 1. DaggerAppCompatActivity 변경
 
     internal val disposables = AutoClearedDisposable(this)
 
     internal val viewDisposables
             = AutoClearedDisposable(lifecycleOwner = this, alwaysClearOnStop = false)
 
-    internal val viewModelFactory by lazy {
-        SignInViewModelFactory(provideAuthApi(), AuthTokenProvider(this))
-    }
+    // 3. 프로퍼티를 inject 한 인자로 변경
+     @Inject lateinit var viewModelFactory : SignInViewModelFactory
 
     lateinit var viewModel: SignInViewModel
+//
+//    // 2. 별도의 프로퍼티 선언
+//    @Inject lateinit var authApi: AuthApi
+//
+//    @Inject lateinit var tokenProvider: AuthTokenProvider
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

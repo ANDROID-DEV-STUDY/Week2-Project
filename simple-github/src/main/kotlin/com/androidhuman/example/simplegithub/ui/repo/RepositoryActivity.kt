@@ -5,17 +5,20 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.androidhuman.example.simplegithub.R
+import com.androidhuman.example.simplegithub.api.GithubApi
 import com.androidhuman.example.simplegithub.api.provideGithubApi
 import com.androidhuman.example.simplegithub.extensions.plusAssign
 import com.androidhuman.example.simplegithub.rx.AutoClearedDisposable
 import com.androidhuman.example.simplegithub.ui.GlideApp
+import dagger.android.support.DaggerAppCompatActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_repository.*
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Locale
+import javax.inject.Inject
 
-class RepositoryActivity : AppCompatActivity() {
+class RepositoryActivity : DaggerAppCompatActivity() {
 
     companion object {
 
@@ -29,9 +32,7 @@ class RepositoryActivity : AppCompatActivity() {
     internal val viewDisposables
             = AutoClearedDisposable(lifecycleOwner = this, alwaysClearOnStop = false)
 
-    internal val viewModelFactory by lazy {
-        RepositoryViewModelFactory(provideGithubApi(this))
-    }
+    @Inject lateinit var viewModelFactory: RepositoryViewModelFactory
 
     lateinit var viewModel: RepositoryViewModel
 
@@ -40,6 +41,8 @@ class RepositoryActivity : AppCompatActivity() {
 
     internal val dateFormatToShow = SimpleDateFormat(
             "yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+
+    @Inject lateinit var githubApi: GithubApi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -117,7 +120,6 @@ class RepositoryActivity : AppCompatActivity() {
     }
 
     private fun setContentVisibility(show: Boolean) {
-
         grpActivityRepositoryContent.visibility = if (show) View.VISIBLE else View.GONE
     }
 
