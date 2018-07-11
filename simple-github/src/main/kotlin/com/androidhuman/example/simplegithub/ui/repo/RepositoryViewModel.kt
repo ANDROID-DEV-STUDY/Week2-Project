@@ -10,7 +10,9 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 
-class RepositoryViewModel(val api: GithubApi) : ViewModel() {
+class RepositoryViewModel(
+        private val api: GithubApi
+) : ViewModel() {
 
     val repository: BehaviorSubject<SupportOptional<GithubRepo>> = BehaviorSubject.create()
 

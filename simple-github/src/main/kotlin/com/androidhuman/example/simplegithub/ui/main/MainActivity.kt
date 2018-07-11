@@ -1,15 +1,15 @@
 package com.androidhuman.example.simplegithub.ui.main
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import com.androidhuman.example.simplegithub.App
 import com.androidhuman.example.simplegithub.R
+import com.androidhuman.example.simplegithub.R.id.*
 import com.androidhuman.example.simplegithub.api.model.GithubRepo
-import com.androidhuman.example.simplegithub.data.provideSearchHistoryDao
 import com.androidhuman.example.simplegithub.extensions.plusAssign
 import com.androidhuman.example.simplegithub.rx.AutoActivatedDisposable
 import com.androidhuman.example.simplegithub.rx.AutoClearedDisposable
@@ -20,6 +20,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.startActivity
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), SearchAdapter.ItemClickListener {
 
@@ -32,17 +33,12 @@ class MainActivity : AppCompatActivity(), SearchAdapter.ItemClickListener {
     internal val viewDisposables
             = AutoClearedDisposable(lifecycleOwner = this, alwaysClearOnStop = false)
 
-    internal val viewModelFactory
-            by lazy { MainViewModelFactory(provideSearchHistoryDao(this)) }
-
-    lateinit var viewModel: MainViewModel
+    @Inject lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        (application as App).createMainComponent(this).inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        viewModel = ViewModelProviders.of(
-                this, viewModelFactory)[MainViewModel::class.java]
 
         lifecycle += disposables
         lifecycle += viewDisposables

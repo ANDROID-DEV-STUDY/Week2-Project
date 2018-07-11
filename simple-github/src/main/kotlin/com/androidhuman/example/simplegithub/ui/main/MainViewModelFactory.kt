@@ -3,8 +3,9 @@ package com.androidhuman.example.simplegithub.ui.main
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import com.androidhuman.example.simplegithub.data.SearchHistoryDao
+import javax.inject.Inject
 
-class MainViewModelFactory(val searchHistoryDao: SearchHistoryDao)
+class MainViewModelFactory @Inject constructor(val searchHistoryDao: SearchHistoryDao)
     : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

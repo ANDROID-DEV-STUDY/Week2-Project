@@ -6,8 +6,8 @@ import com.androidhuman.example.simplegithub.api.GithubApi
 import com.androidhuman.example.simplegithub.data.SearchHistoryDao
 
 class SearchViewModelFactory(
-        val api: GithubApi,
-        val searchHistoryDao: SearchHistoryDao)
+        private val api: GithubApi,
+        private val searchHistoryDao: SearchHistoryDao)
     : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

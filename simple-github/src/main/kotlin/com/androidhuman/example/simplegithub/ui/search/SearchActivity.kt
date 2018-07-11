@@ -1,6 +1,5 @@
 package com.androidhuman.example.simplegithub.ui.search
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -9,10 +8,9 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import com.androidhuman.example.simplegithub.App
 import com.androidhuman.example.simplegithub.R
 import com.androidhuman.example.simplegithub.api.model.GithubRepo
-import com.androidhuman.example.simplegithub.api.provideGithubApi
-import com.androidhuman.example.simplegithub.data.provideSearchHistoryDao
 import com.androidhuman.example.simplegithub.extensions.plusAssign
 import com.androidhuman.example.simplegithub.rx.AutoClearedDisposable
 import com.androidhuman.example.simplegithub.ui.repo.RepositoryActivity
@@ -20,6 +18,7 @@ import com.jakewharton.rxbinding2.support.v7.widget.queryTextChangeEvents
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_search.*
 import org.jetbrains.anko.startActivity
+import javax.inject.Inject
 
 class SearchActivity : AppCompatActivity(), SearchAdapter.ItemClickListener {
 
@@ -36,20 +35,12 @@ class SearchActivity : AppCompatActivity(), SearchAdapter.ItemClickListener {
     internal val viewDisposables
             = AutoClearedDisposable(lifecycleOwner = this, alwaysClearOnStop = false)
 
-    internal val viewModelFactory by lazy {
-        SearchViewModelFactory(
-                provideGithubApi(this),
-                provideSearchHistoryDao(this))
-    }
-
-    lateinit var viewModel: SearchViewModel
+    @Inject lateinit var viewModel: SearchViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        (application as App).createSearchComponent(this).inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-
-        viewModel = ViewModelProviders.of(
-                this, viewModelFactory)[SearchViewModel::class.java]
 
         lifecycle += disposables
         lifecycle += viewDisposables

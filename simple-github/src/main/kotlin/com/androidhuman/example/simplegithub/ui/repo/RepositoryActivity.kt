@@ -1,39 +1,28 @@
 package com.androidhuman.example.simplegithub.ui.repo
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import com.androidhuman.example.simplegithub.App
 import com.androidhuman.example.simplegithub.R
-import com.androidhuman.example.simplegithub.api.provideGithubApi
 import com.androidhuman.example.simplegithub.extensions.plusAssign
 import com.androidhuman.example.simplegithub.rx.AutoClearedDisposable
-import com.androidhuman.example.simplegithub.ui.GlideApp
+import com.bumptech.glide.Glide
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_repository.*
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.Locale
+import java.util.*
+import javax.inject.Inject
 
 class RepositoryActivity : AppCompatActivity() {
-
-    companion object {
-
-        const val KEY_USER_LOGIN = "user_login"
-
-        const val KEY_REPO_NAME = "repo_name"
-    }
 
     internal val disposables = AutoClearedDisposable(this)
 
     internal val viewDisposables
             = AutoClearedDisposable(lifecycleOwner = this, alwaysClearOnStop = false)
 
-    internal val viewModelFactory by lazy {
-        RepositoryViewModelFactory(provideGithubApi(this))
-    }
-
-    lateinit var viewModel: RepositoryViewModel
+    @Inject lateinit var viewModel: RepositoryViewModel
 
     internal val dateFormatInResponse = SimpleDateFormat(
             "yyyy-MM-dd'T'HH:mm:ssX", Locale.getDefault())
@@ -42,11 +31,9 @@ class RepositoryActivity : AppCompatActivity() {
             "yyyy-MM-dd HH:mm:ss", Locale.getDefault())
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        (application as App).createRepositoryComponent(this).inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_repository)
-
-        viewModel = ViewModelProviders.of(
-                this, viewModelFactory)[RepositoryViewModel::class.java]
 
         lifecycle += disposables
         lifecycle += viewDisposables
@@ -56,7 +43,7 @@ class RepositoryActivity : AppCompatActivity() {
                 .map { it.value }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { repository ->
-                    GlideApp.with(this@RepositoryActivity)
+                    Glide.with(this@RepositoryActivity)
                             .load(repository.owner.avatarUrl)
                             .into(ivActivityRepositoryProfile)
 
@@ -125,5 +112,12 @@ class RepositoryActivity : AppCompatActivity() {
             text = message
             visibility = View.VISIBLE
         }
+    }
+
+    companion object {
+
+        const val KEY_USER_LOGIN = "user_login"
+
+        const val KEY_REPO_NAME = "repo_name"
     }
 }

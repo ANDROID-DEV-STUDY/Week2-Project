@@ -1,16 +1,14 @@
 package com.androidhuman.example.simplegithub.ui.signin
 
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.customtabs.CustomTabsIntent
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import com.androidhuman.example.simplegithub.App
 import com.androidhuman.example.simplegithub.BuildConfig
 import com.androidhuman.example.simplegithub.R
-import com.androidhuman.example.simplegithub.api.provideAuthApi
-import com.androidhuman.example.simplegithub.data.AuthTokenProvider
 import com.androidhuman.example.simplegithub.extensions.plusAssign
 import com.androidhuman.example.simplegithub.rx.AutoClearedDisposable
 import com.androidhuman.example.simplegithub.ui.main.MainActivity
@@ -20,6 +18,7 @@ import org.jetbrains.anko.clearTask
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.newTask
+import javax.inject.Inject
 
 class SignInActivity : AppCompatActivity() {
 
@@ -28,20 +27,14 @@ class SignInActivity : AppCompatActivity() {
     internal val viewDisposables
             = AutoClearedDisposable(lifecycleOwner = this, alwaysClearOnStop = false)
 
-    internal val viewModelFactory by lazy {
-        SignInViewModelFactory(provideAuthApi(), AuthTokenProvider(this))
-    }
-
-    lateinit var viewModel: SignInViewModel
+    @Inject lateinit var viewModel: SignInViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        (application as App).createSignInComponent(this).inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_in)
 
-        viewModel = ViewModelProviders.of(
-                this, viewModelFactory)[SignInViewModel::class.java]
-
-        lifecycle += disposables
+        lifecycle += disposables // lifecycle.plusAssign(disposables)
         lifecycle += viewDisposables
 
         btnActivitySignInStart.setOnClickListener {

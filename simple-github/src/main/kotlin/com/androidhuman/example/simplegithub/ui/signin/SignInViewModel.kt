@@ -13,9 +13,9 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 
 class SignInViewModel(
-        val api: AuthApi,
-        val authTokenProvider: AuthTokenProvider)
-    : ViewModel() {
+        private val api: AuthApi,
+        private val authTokenProvider: AuthTokenProvider
+) : ViewModel() {
 
     val accessToken: BehaviorSubject<SupportOptional<String>> = BehaviorSubject.create()
 

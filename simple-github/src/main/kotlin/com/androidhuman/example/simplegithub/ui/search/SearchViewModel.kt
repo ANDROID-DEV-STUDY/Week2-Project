@@ -14,9 +14,9 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
 class SearchViewModel(
-        val api: GithubApi,
-        val searchHistoryDao: SearchHistoryDao)
-    : ViewModel() {
+        private val api: GithubApi,
+        private val searchHistoryDao: SearchHistoryDao
+) : ViewModel() {
 
     val searchResult: BehaviorSubject<SupportOptional<List<GithubRepo>>>
             = BehaviorSubject.createDefault(emptyOptional())

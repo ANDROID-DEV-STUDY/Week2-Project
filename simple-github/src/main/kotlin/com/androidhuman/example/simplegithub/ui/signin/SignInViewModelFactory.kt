@@ -6,9 +6,9 @@ import com.androidhuman.example.simplegithub.api.AuthApi
 import com.androidhuman.example.simplegithub.data.AuthTokenProvider
 
 class SignInViewModelFactory(
-        val api: AuthApi,
-        val authTokenProvider: AuthTokenProvider)
-    : ViewModelProvider.Factory {
+        private val api: AuthApi,
+        private val authTokenProvider: AuthTokenProvider
+) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         @Suppress("UNCHECKED_CAST")
