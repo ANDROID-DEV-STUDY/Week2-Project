@@ -7,7 +7,7 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.androidhuman.example.simplegithub.R
-import com.androidhuman.example.simplegithub.api.model.GithubRepo
+import com.androidhuman.example.simplegithub.data.model.GithubRepo
 import com.androidhuman.example.simplegithub.ui.GlideApp
 import kotlinx.android.synthetic.main.item_repository.view.*
 

@@ -1,28 +1,28 @@
 package com.androidhuman.example.simplegithub.ui.repo
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.View
-import com.androidhuman.example.simplegithub.App
 import com.androidhuman.example.simplegithub.R
+import com.androidhuman.example.simplegithub.databinding.ActivityRepositoryBinding
 import com.androidhuman.example.simplegithub.extensions.plusAssign
 import com.androidhuman.example.simplegithub.rx.AutoClearedDisposable
+import com.androidhuman.example.simplegithub.ui.base.BaseActivity
 import com.bumptech.glide.Glide
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_repository.*
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
-import javax.inject.Inject
 
-class RepositoryActivity : AppCompatActivity() {
+class RepositoryActivity : BaseActivity<ActivityRepositoryBinding, RepositoryViewModel>(R.layout.activity_repository) {
+
+    override val modelClass: Class<RepositoryViewModel>
+        get() = RepositoryViewModel::class.java
 
     internal val disposables = AutoClearedDisposable(this)
 
     internal val viewDisposables
             = AutoClearedDisposable(lifecycleOwner = this, alwaysClearOnStop = false)
-
-    @Inject lateinit var viewModel: RepositoryViewModel
 
     internal val dateFormatInResponse = SimpleDateFormat(
             "yyyy-MM-dd'T'HH:mm:ssX", Locale.getDefault())
@@ -31,9 +31,7 @@ class RepositoryActivity : AppCompatActivity() {
             "yyyy-MM-dd HH:mm:ss", Locale.getDefault())
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        (application as App).createRepositoryComponent(this).inject(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_repository)
 
         lifecycle += disposables
         lifecycle += viewDisposables

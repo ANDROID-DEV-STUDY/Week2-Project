@@ -1,26 +1,29 @@
 package com.androidhuman.example.simplegithub.ui.search
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import com.androidhuman.example.simplegithub.App
 import com.androidhuman.example.simplegithub.R
-import com.androidhuman.example.simplegithub.api.model.GithubRepo
+import com.androidhuman.example.simplegithub.data.model.GithubRepo
+import com.androidhuman.example.simplegithub.databinding.ActivitySearchBinding
 import com.androidhuman.example.simplegithub.extensions.plusAssign
 import com.androidhuman.example.simplegithub.rx.AutoClearedDisposable
+import com.androidhuman.example.simplegithub.ui.base.BaseActivity
 import com.androidhuman.example.simplegithub.ui.repo.RepositoryActivity
 import com.jakewharton.rxbinding2.support.v7.widget.queryTextChangeEvents
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.activity_search.*
 import org.jetbrains.anko.startActivity
-import javax.inject.Inject
 
-class SearchActivity : AppCompatActivity(), SearchAdapter.ItemClickListener {
+class SearchActivity
+    : BaseActivity<ActivitySearchBinding, SearchViewModel>(R.layout.activity_search),
+        SearchAdapter.ItemClickListener {
+
+    override val modelClass: Class<SearchViewModel>
+        get() = SearchViewModel::class.java
 
     internal lateinit var menuSearch: MenuItem
 
@@ -35,17 +38,13 @@ class SearchActivity : AppCompatActivity(), SearchAdapter.ItemClickListener {
     internal val viewDisposables
             = AutoClearedDisposable(lifecycleOwner = this, alwaysClearOnStop = false)
 
-    @Inject lateinit var viewModel: SearchViewModel
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        (application as App).createSearchComponent(this).inject(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
 
         lifecycle += disposables
         lifecycle += viewDisposables
 
-        with(rvActivitySearchList) {
+        with(mBinding.rvActivitySearchList) {
             layoutManager = LinearLayoutManager(this@SearchActivity)
             adapter = this@SearchActivity.adapter
         }
@@ -150,22 +149,22 @@ class SearchActivity : AppCompatActivity(), SearchAdapter.ItemClickListener {
     }
 
     private fun showProgress() {
-        pbActivitySearch.visibility = View.VISIBLE
+        mBinding.pbActivitySearch.visibility = View.VISIBLE
     }
 
     private fun hideProgress() {
-        pbActivitySearch.visibility = View.GONE
+        mBinding.pbActivitySearch.visibility = View.GONE
     }
 
     private fun showError(message: String?) {
-        with(tvActivitySearchMessage) {
+        with(mBinding.tvActivitySearchMessage) {
             text = message ?: "Unexpected error."
             visibility = View.VISIBLE
         }
     }
 
     private fun hideError() {
-        with(tvActivitySearchMessage) {
+        with(mBinding.tvActivitySearchMessage) {
             text = ""
             visibility = View.GONE
         }

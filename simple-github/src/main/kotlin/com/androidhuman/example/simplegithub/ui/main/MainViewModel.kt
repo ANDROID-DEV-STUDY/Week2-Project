@@ -1,17 +1,20 @@
 package com.androidhuman.example.simplegithub.ui.main
 
-import android.arch.lifecycle.ViewModel
-import com.androidhuman.example.simplegithub.api.model.GithubRepo
-import com.androidhuman.example.simplegithub.data.SearchHistoryDao
+import com.androidhuman.example.simplegithub.data.local.SearchHistoryDao
+import com.androidhuman.example.simplegithub.data.model.GithubRepo
 import com.androidhuman.example.simplegithub.extensions.runOnIoScheduler
+import com.androidhuman.example.simplegithub.ui.base.BaseViewModel
 import com.androidhuman.example.simplegithub.util.SupportOptional
 import com.androidhuman.example.simplegithub.util.emptyOptional
 import com.androidhuman.example.simplegithub.util.optionalOf
 import io.reactivex.Flowable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
+import javax.inject.Inject
 
-class MainViewModel(val searchHistoryDao: SearchHistoryDao) : ViewModel() {
+class MainViewModel @Inject constructor(
+        private val searchHistoryDao: SearchHistoryDao
+) : BaseViewModel() {
 
     val searchHistory: Flowable<SupportOptional<List<GithubRepo>>>
         get() = searchHistoryDao.getHistory()

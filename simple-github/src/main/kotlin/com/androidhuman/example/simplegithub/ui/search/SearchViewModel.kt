@@ -1,10 +1,10 @@
 package com.androidhuman.example.simplegithub.ui.search
 
-import android.arch.lifecycle.ViewModel
-import com.androidhuman.example.simplegithub.api.GithubApi
-import com.androidhuman.example.simplegithub.api.model.GithubRepo
-import com.androidhuman.example.simplegithub.data.SearchHistoryDao
+import com.androidhuman.example.simplegithub.data.local.SearchHistoryDao
+import com.androidhuman.example.simplegithub.data.model.GithubRepo
+import com.androidhuman.example.simplegithub.data.remote.GithubApi
 import com.androidhuman.example.simplegithub.extensions.runOnIoScheduler
+import com.androidhuman.example.simplegithub.ui.base.BaseViewModel
 import com.androidhuman.example.simplegithub.util.SupportOptional
 import com.androidhuman.example.simplegithub.util.emptyOptional
 import com.androidhuman.example.simplegithub.util.optionalOf
@@ -12,11 +12,12 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
+import javax.inject.Inject
 
-class SearchViewModel(
+class SearchViewModel @Inject constructor(
         private val api: GithubApi,
         private val searchHistoryDao: SearchHistoryDao
-) : ViewModel() {
+) : BaseViewModel() {
 
     val searchResult: BehaviorSubject<SupportOptional<List<GithubRepo>>>
             = BehaviorSubject.createDefault(emptyOptional())

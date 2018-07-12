@@ -2,7 +2,7 @@ package com.androidhuman.example.simplegithub.ui.main
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import com.androidhuman.example.simplegithub.data.SearchHistoryDao
+import com.androidhuman.example.simplegithub.data.local.SearchHistoryDao
 import javax.inject.Inject
 
 class MainViewModelFactory @Inject constructor(val searchHistoryDao: SearchHistoryDao)

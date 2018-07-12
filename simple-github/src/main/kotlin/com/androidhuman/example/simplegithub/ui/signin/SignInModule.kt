@@ -1,23 +1,13 @@
 package com.androidhuman.example.simplegithub.ui.signin
 
-import android.arch.lifecycle.ViewModelProviders
-import com.androidhuman.example.simplegithub.api.AuthApi
-import com.androidhuman.example.simplegithub.data.AuthTokenProvider
+import android.arch.lifecycle.ViewModelProvider
 import com.androidhuman.example.simplegithub.di.scope.ActivityScope
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 
 @Module
-class SignInModule(private val activity: SignInActivity) {
+abstract class SignInModule {
 
-    @Provides
-    fun provideActivity() : SignInActivity = activity
-
-    @Provides
-    fun provideSignInViewModelFactory(api : AuthApi, authTokenProvider: AuthTokenProvider) : SignInViewModelFactory
-            = SignInViewModelFactory(api, authTokenProvider)
-
-    @Provides @ActivityScope
-    fun provideSignInViewModel(activity : SignInActivity, signInViewModelFactory: SignInViewModelFactory)
-            = ViewModelProviders.of(activity, signInViewModelFactory)[SignInViewModel::class.java]
+    @Binds @ActivityScope
+    abstract fun provideSignInViewModelFactory(signInViewModelFactory: SignInViewModelFactory) : ViewModelProvider.Factory
 }

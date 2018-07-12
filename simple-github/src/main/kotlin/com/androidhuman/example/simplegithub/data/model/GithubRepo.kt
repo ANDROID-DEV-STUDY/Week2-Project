@@ -1,4 +1,4 @@
-package com.androidhuman.example.simplegithub.api.model
+package com.androidhuman.example.simplegithub.data.model
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Embedded

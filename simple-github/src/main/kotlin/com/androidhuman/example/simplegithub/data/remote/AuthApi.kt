@@ -1,6 +1,6 @@
-package com.androidhuman.example.simplegithub.api
+package com.androidhuman.example.simplegithub.data.remote
 
-import com.androidhuman.example.simplegithub.api.model.GithubAccessToken
+import com.androidhuman.example.simplegithub.data.model.GithubAccessToken
 import io.reactivex.Observable
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded

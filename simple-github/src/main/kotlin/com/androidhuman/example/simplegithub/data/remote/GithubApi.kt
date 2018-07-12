@@ -1,7 +1,7 @@
-package com.androidhuman.example.simplegithub.api
+package com.androidhuman.example.simplegithub.data.remote
 
-import com.androidhuman.example.simplegithub.api.model.GithubRepo
-import com.androidhuman.example.simplegithub.api.model.RepoSearchResponse
+import com.androidhuman.example.simplegithub.data.model.GithubRepo
+import com.androidhuman.example.simplegithub.data.model.RepoSearchResponse
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Path

@@ -1,22 +1,18 @@
 package com.androidhuman.example.simplegithub.ui.repo
 
-import android.arch.lifecycle.ViewModelProviders
-import com.androidhuman.example.simplegithub.api.GithubApi
+import android.arch.lifecycle.ViewModelProvider
 import com.androidhuman.example.simplegithub.di.scope.ActivityScope
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 
 @Module
-class RepositoryModule(private val repositoryActivity: RepositoryActivity) {
+abstract class RepositoryModule {
 
-    @Provides
-    fun provideRepositoryActivity(): RepositoryActivity = repositoryActivity
+    /*
+    @Binds @ActivityScope @Named("activityContext")
+    abstract fun provideContext(repositoryActivity: RepositoryActivity) : Context
+    */
 
-    @Provides
-    fun provideRepositoryViewModelFactory(api : GithubApi): RepositoryViewModelFactory
-            = RepositoryViewModelFactory(api)
-
-    @Provides @ActivityScope
-    fun provideRepositoryViewModel(repositoryActivity: RepositoryActivity, repositoryViewModelFactory: RepositoryViewModelFactory)
-            = ViewModelProviders.of(repositoryActivity, repositoryViewModelFactory)[RepositoryViewModel::class.java]
+    @Binds @ActivityScope
+    abstract fun provideRepositoryViewModelFactory(repositoryViewModelFactory: RepositoryViewModelFactory): ViewModelProvider.Factory
 }

@@ -1,4 +1,4 @@
-package com.androidhuman.example.simplegithub.api.model
+package com.androidhuman.example.simplegithub.data.model
 
 import com.google.gson.annotations.SerializedName
 

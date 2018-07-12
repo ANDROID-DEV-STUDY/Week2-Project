@@ -1,8 +1,8 @@
 package com.androidhuman.example.simplegithub.ui.signin
 
-import android.arch.lifecycle.ViewModel
-import com.androidhuman.example.simplegithub.api.AuthApi
-import com.androidhuman.example.simplegithub.data.AuthTokenProvider
+import com.androidhuman.example.simplegithub.data.local.AuthTokenProvider
+import com.androidhuman.example.simplegithub.data.remote.AuthApi
+import com.androidhuman.example.simplegithub.ui.base.BaseViewModel
 import com.androidhuman.example.simplegithub.util.SupportOptional
 import com.androidhuman.example.simplegithub.util.optionalOf
 import io.reactivex.Single
@@ -11,11 +11,12 @@ import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
+import javax.inject.Inject
 
-class SignInViewModel(
+class SignInViewModel @Inject constructor(
         private val api: AuthApi,
         private val authTokenProvider: AuthTokenProvider
-) : ViewModel() {
+) : BaseViewModel() {
 
     val accessToken: BehaviorSubject<SupportOptional<String>> = BehaviorSubject.create()
 

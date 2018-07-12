@@ -1,10 +1,10 @@
-package com.androidhuman.example.simplegithub.data
+package com.androidhuman.example.simplegithub.data.local
 
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
-import com.androidhuman.example.simplegithub.api.model.GithubRepo
+import com.androidhuman.example.simplegithub.data.model.GithubRepo
 import io.reactivex.Flowable
 
 @Dao

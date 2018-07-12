@@ -1,4 +1,4 @@
-package com.androidhuman.example.simplegithub.data
+package com.androidhuman.example.simplegithub.data.local
 
 import android.content.Context
 import android.preference.PreferenceManager

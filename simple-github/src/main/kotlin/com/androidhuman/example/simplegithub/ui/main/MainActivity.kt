@@ -1,28 +1,31 @@
 package com.androidhuman.example.simplegithub.ui.main
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import com.androidhuman.example.simplegithub.App
 import com.androidhuman.example.simplegithub.R
-import com.androidhuman.example.simplegithub.R.id.*
-import com.androidhuman.example.simplegithub.api.model.GithubRepo
+import com.androidhuman.example.simplegithub.data.model.GithubRepo
+import com.androidhuman.example.simplegithub.databinding.ActivityMainBinding
 import com.androidhuman.example.simplegithub.extensions.plusAssign
 import com.androidhuman.example.simplegithub.rx.AutoActivatedDisposable
 import com.androidhuman.example.simplegithub.rx.AutoClearedDisposable
+import com.androidhuman.example.simplegithub.ui.base.BaseActivity
 import com.androidhuman.example.simplegithub.ui.repo.RepositoryActivity
 import com.androidhuman.example.simplegithub.ui.search.SearchActivity
 import com.androidhuman.example.simplegithub.ui.search.SearchAdapter
+import dagger.android.AndroidInjection
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.startActivity
-import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), SearchAdapter.ItemClickListener {
+class MainActivity :
+        BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.activity_main),
+        SearchAdapter.ItemClickListener {
+
+    override val modelClass: Class<MainViewModel>
+        get() = MainViewModel::class.java
 
     internal val adapter by lazy {
         SearchAdapter().apply { setItemClickListener(this@MainActivity) }
@@ -33,12 +36,8 @@ class MainActivity : AppCompatActivity(), SearchAdapter.ItemClickListener {
     internal val viewDisposables
             = AutoClearedDisposable(lifecycleOwner = this, alwaysClearOnStop = false)
 
-    @Inject lateinit var viewModel: MainViewModel
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        (application as App).createMainComponent(this).inject(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
         lifecycle += disposables
         lifecycle += viewDisposables
@@ -58,11 +57,11 @@ class MainActivity : AppCompatActivity(), SearchAdapter.ItemClickListener {
                     }
         }
 
-        btnActivityMainSearch.setOnClickListener {
+        mBinding.btnActivityMainSearch.setOnClickListener {
             startActivity<SearchActivity>()
         }
 
-        with(rvActivityMainList) {
+        with(mBinding.rvActivityMainList) {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = this@MainActivity.adapter
         }
@@ -98,14 +97,14 @@ class MainActivity : AppCompatActivity(), SearchAdapter.ItemClickListener {
     }
 
     private fun showMessage(message: String) {
-        with(tvActivityMainMessage) {
+        with(mBinding.tvActivityMainMessage) {
             text = message
             visibility = View.VISIBLE
         }
     }
 
     private fun hideMessage() {
-        with(tvActivityMainMessage) {
+        with(mBinding.tvActivityMainMessage) {
             text = ""
             visibility = View.GONE
         }

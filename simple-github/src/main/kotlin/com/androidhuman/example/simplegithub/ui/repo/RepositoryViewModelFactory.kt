@@ -2,7 +2,7 @@ package com.androidhuman.example.simplegithub.ui.repo
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import com.androidhuman.example.simplegithub.api.GithubApi
+import com.androidhuman.example.simplegithub.data.remote.GithubApi
 
 class RepositoryViewModelFactory(
         private val api: GithubApi

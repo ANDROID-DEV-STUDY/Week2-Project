@@ -1,14 +1,14 @@
 package com.androidhuman.example.simplegithub.di.module
 
 import android.content.Context
-import com.androidhuman.example.simplegithub.App
+import com.androidhuman.example.simplegithub.GitApplication
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-class AppModule(private val app: App) {
+abstract class AppModule {
 
-    @Provides @Singleton
-    fun provideContext() : Context = app
+    @Binds @Singleton
+    abstract fun provideContext(application: GitApplication) : Context
 }

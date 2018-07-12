@@ -1,4 +1,4 @@
-package com.androidhuman.example.simplegithub.api
+package com.androidhuman.example.simplegithub.data.remote
 
 import okhttp3.Interceptor
 import okhttp3.Response

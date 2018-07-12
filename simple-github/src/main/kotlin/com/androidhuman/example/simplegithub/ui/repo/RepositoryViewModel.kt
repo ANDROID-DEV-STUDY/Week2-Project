@@ -1,18 +1,19 @@
 package com.androidhuman.example.simplegithub.ui.repo
 
-import android.arch.lifecycle.ViewModel
-import com.androidhuman.example.simplegithub.api.GithubApi
-import com.androidhuman.example.simplegithub.api.model.GithubRepo
+import com.androidhuman.example.simplegithub.data.model.GithubRepo
+import com.androidhuman.example.simplegithub.data.remote.GithubApi
+import com.androidhuman.example.simplegithub.ui.base.BaseViewModel
 import com.androidhuman.example.simplegithub.util.SupportOptional
 import com.androidhuman.example.simplegithub.util.optionalOf
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
+import javax.inject.Inject
 
-class RepositoryViewModel(
+class RepositoryViewModel @Inject constructor(
         private val api: GithubApi
-) : ViewModel() {
+) : BaseViewModel() {
 
     val repository: BehaviorSubject<SupportOptional<GithubRepo>> = BehaviorSubject.create()
 

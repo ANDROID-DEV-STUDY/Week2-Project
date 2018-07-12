@@ -4,13 +4,13 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.customtabs.CustomTabsIntent
-import android.support.v7.app.AppCompatActivity
 import android.view.View
-import com.androidhuman.example.simplegithub.App
 import com.androidhuman.example.simplegithub.BuildConfig
 import com.androidhuman.example.simplegithub.R
+import com.androidhuman.example.simplegithub.databinding.ActivitySignInBinding
 import com.androidhuman.example.simplegithub.extensions.plusAssign
 import com.androidhuman.example.simplegithub.rx.AutoClearedDisposable
+import com.androidhuman.example.simplegithub.ui.base.BaseActivity
 import com.androidhuman.example.simplegithub.ui.main.MainActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_sign_in.*
@@ -18,21 +18,19 @@ import org.jetbrains.anko.clearTask
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.newTask
-import javax.inject.Inject
 
-class SignInActivity : AppCompatActivity() {
+class SignInActivity : BaseActivity<ActivitySignInBinding, SignInViewModel>(R.layout.activity_sign_in) {
+
+    override val modelClass: Class<SignInViewModel>
+        get() = SignInViewModel::class.java
 
     internal val disposables = AutoClearedDisposable(this)
 
     internal val viewDisposables
             = AutoClearedDisposable(lifecycleOwner = this, alwaysClearOnStop = false)
 
-    @Inject lateinit var viewModel: SignInViewModel
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        (application as App).createSignInComponent(this).inject(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sign_in)
 
         lifecycle += disposables // lifecycle.plusAssign(disposables)
         lifecycle += viewDisposables
