@@ -1,5 +1,6 @@
 package com.androidhuman.example.simplegithub.ui.main
 
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
@@ -8,17 +9,13 @@ import android.view.View
 import com.androidhuman.example.simplegithub.R
 import com.androidhuman.example.simplegithub.data.model.GithubRepo
 import com.androidhuman.example.simplegithub.databinding.ActivityMainBinding
-import com.androidhuman.example.simplegithub.extensions.plusAssign
-import com.androidhuman.example.simplegithub.rx.AutoActivatedDisposable
-import com.androidhuman.example.simplegithub.rx.AutoClearedDisposable
 import com.androidhuman.example.simplegithub.ui.base.BaseActivity
 import com.androidhuman.example.simplegithub.ui.repo.RepositoryActivity
 import com.androidhuman.example.simplegithub.ui.search.SearchActivity
 import com.androidhuman.example.simplegithub.ui.search.SearchAdapter
-import dagger.android.AndroidInjection
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import com.androidhuman.example.simplegithub.util.State
 import org.jetbrains.anko.startActivity
+import javax.inject.Inject
 
 class MainActivity :
         BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.activity_main),
@@ -27,35 +24,21 @@ class MainActivity :
     override val modelClass: Class<MainViewModel>
         get() = MainViewModel::class.java
 
-    internal val adapter by lazy {
-        SearchAdapter().apply { setItemClickListener(this@MainActivity) }
-    }
-
-    internal val disposables = AutoClearedDisposable(this)
-
-    internal val viewDisposables
-            = AutoClearedDisposable(lifecycleOwner = this, alwaysClearOnStop = false)
+    @Inject lateinit var mAdapter: SearchAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        lifecycle += disposables
-        lifecycle += viewDisposables
-        lifecycle += AutoActivatedDisposable(this) {
-            viewModel.searchHistory
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { items ->
-                        with(adapter) {
-                            if (items.isEmpty) {
-                                clearItems()
-                            } else {
-                                setItems(items.value)
-                            }
-                            notifyDataSetChanged()
-                        }
-                    }
-        }
+        viewModel.loadHistory()
+
+        viewModel.state.observe(this, Observer {
+            when(it) {
+                is State.Init -> { hideMessage() }
+                is State.Loading -> {  }
+                is State.Success -> { mAdapter.setItems(it.data) }
+                is State.Error -> { showMessage(it.message) }
+            }
+        })
 
         mBinding.btnActivityMainSearch.setOnClickListener {
             startActivity<SearchActivity>()
@@ -63,18 +46,8 @@ class MainActivity :
 
         with(mBinding.rvActivityMainList) {
             layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = this@MainActivity.adapter
+            adapter = mAdapter.apply { setItemClickListener(this@MainActivity) }
         }
-
-        viewDisposables += viewModel.message
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { message ->
-                    if (message.isEmpty) {
-                        hideMessage()
-                    } else {
-                        showMessage(message.value)
-                    }
-                }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -84,7 +57,7 @@ class MainActivity :
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (R.id.menu_activity_main_clear_all == item.itemId) {
-            disposables += viewModel.clearSearchHistory()
+            viewModel.clearSearchHistory()
             return true
         }
         return super.onOptionsItemSelected(item)

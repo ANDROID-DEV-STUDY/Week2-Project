@@ -1,4 +1,4 @@
 package com.androidhuman.example.simplegithub.data.repository
 
-interface RepoRepository {
-}
+// Dao > LocalDataSource
+interface RepoRepository: RepoLocalDataSource, RepoRemoteDataSource

@@ -4,9 +4,9 @@ import io.reactivex.disposables.CompositeDisposable
 
 abstract class RxBaseViewModel : BaseViewModel() {
 
-    val disposable = CompositeDisposable()
+    val mDisposable = CompositeDisposable()
 
     override fun onCleared() {
-        disposable.clear()
+        mDisposable.clear()
     }
 }

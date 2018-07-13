@@ -9,9 +9,8 @@ import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
-import javax.inject.Inject
 
-class RepositoryViewModel @Inject constructor(
+class RepositoryViewModel constructor(
         private val api: GithubApi
 ) : BaseViewModel() {
 

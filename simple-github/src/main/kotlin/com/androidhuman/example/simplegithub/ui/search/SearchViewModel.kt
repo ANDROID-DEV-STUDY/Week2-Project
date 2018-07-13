@@ -12,9 +12,8 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
-import javax.inject.Inject
 
-class SearchViewModel @Inject constructor(
+class SearchViewModel constructor(
         private val api: GithubApi,
         private val searchHistoryDao: SearchHistoryDao
 ) : BaseViewModel() {

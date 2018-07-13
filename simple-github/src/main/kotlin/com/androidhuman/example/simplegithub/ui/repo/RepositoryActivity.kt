@@ -8,6 +8,7 @@ import com.androidhuman.example.simplegithub.extensions.plusAssign
 import com.androidhuman.example.simplegithub.rx.AutoClearedDisposable
 import com.androidhuman.example.simplegithub.ui.base.BaseActivity
 import com.bumptech.glide.Glide
+import dagger.android.AndroidInjection
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_repository.*
 import java.text.ParseException
@@ -31,7 +32,9 @@ class RepositoryActivity : BaseActivity<ActivityRepositoryBinding, RepositoryVie
             "yyyy-MM-dd HH:mm:ss", Locale.getDefault())
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_repository)
 
         lifecycle += disposables
         lifecycle += viewDisposables

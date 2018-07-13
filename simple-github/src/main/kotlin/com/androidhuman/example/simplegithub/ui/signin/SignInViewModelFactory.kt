@@ -2,10 +2,11 @@ package com.androidhuman.example.simplegithub.ui.signin
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import com.androidhuman.example.simplegithub.data.remote.AuthApi
 import com.androidhuman.example.simplegithub.data.local.AuthTokenProvider
+import com.androidhuman.example.simplegithub.data.remote.AuthApi
+import javax.inject.Inject
 
-class SignInViewModelFactory(
+class SignInViewModelFactory @Inject constructor(
         private val api: AuthApi,
         private val authTokenProvider: AuthTokenProvider
 ) : ViewModelProvider.Factory {

@@ -1,38 +1,34 @@
 package com.androidhuman.example.simplegithub.ui.main
 
-import com.androidhuman.example.simplegithub.data.local.SearchHistoryDao
+import android.arch.lifecycle.MutableLiveData
 import com.androidhuman.example.simplegithub.data.model.GithubRepo
+import com.androidhuman.example.simplegithub.data.repository.RepoRepository
 import com.androidhuman.example.simplegithub.extensions.runOnIoScheduler
-import com.androidhuman.example.simplegithub.ui.base.BaseViewModel
-import com.androidhuman.example.simplegithub.util.SupportOptional
-import com.androidhuman.example.simplegithub.util.emptyOptional
-import com.androidhuman.example.simplegithub.util.optionalOf
-import io.reactivex.Flowable
-import io.reactivex.disposables.Disposable
-import io.reactivex.subjects.BehaviorSubject
-import javax.inject.Inject
+import com.androidhuman.example.simplegithub.ui.base.RxBaseViewModel
+import com.androidhuman.example.simplegithub.util.State
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
-class MainViewModel @Inject constructor(
-        private val searchHistoryDao: SearchHistoryDao
-) : BaseViewModel() {
+class MainViewModel constructor(
+        private val repository : RepoRepository
+) : RxBaseViewModel() {
 
-    val searchHistory: Flowable<SupportOptional<List<GithubRepo>>>
-        get() = searchHistoryDao.getHistory()
-                .map { optionalOf(it) }
-                .doOnNext { optional ->
-                    if (optional.value.isEmpty()) {
-                        message.onNext(optionalOf("No recent repositories."))
-                    } else {
-                        message.onNext(emptyOptional())
-                    }
-                }
-                .doOnError {
-                    message.onNext(optionalOf(it.message ?: "Unexpected error"))
-                }
-                .onErrorReturn { emptyOptional() }
+    val state: MutableLiveData<State<List<GithubRepo>>> = MutableLiveData()
 
-    val message: BehaviorSubject<SupportOptional<String>> = BehaviorSubject.create()
+    fun loadHistory()
+        = repository.getHistory()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe { state.value = State.Loading() }
+            .doOnTerminate { state.value = State.Init() }
+            .subscribe({
+                it.takeIf { it.isNotEmpty() }
+                        ?.let { state.value = State.Success(it) }
+                        ?:let { state.value = State.Error("No recent repositories.") }
+            },{
+                state.value = State.Error(it.message ?: "Unexpected error")
+            })
+            .let { mDisposable.add(it) }
 
-    fun clearSearchHistory(): Disposable
-            = runOnIoScheduler { searchHistoryDao.clearAll() }
+    fun clearSearchHistory() = runOnIoScheduler { repository.clearHistory() }.let { mDisposable.add(it) }
 }

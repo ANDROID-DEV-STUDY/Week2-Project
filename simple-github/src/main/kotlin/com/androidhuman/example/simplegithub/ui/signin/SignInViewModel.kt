@@ -11,9 +11,8 @@ import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
-import javax.inject.Inject
 
-class SignInViewModel @Inject constructor(
+class SignInViewModel constructor(
         private val api: AuthApi,
         private val authTokenProvider: AuthTokenProvider
 ) : BaseViewModel() {

@@ -25,17 +25,17 @@ class SearchActivity
     override val modelClass: Class<SearchViewModel>
         get() = SearchViewModel::class.java
 
-    internal lateinit var menuSearch: MenuItem
+    private lateinit var menuSearch: MenuItem
 
-    internal lateinit var searchView: SearchView
+    private lateinit var searchView: SearchView
 
-    internal val adapter by lazy {
+    private val adapter by lazy {
         SearchAdapter().apply { setItemClickListener(this@SearchActivity) }
     }
 
-    internal val disposables = AutoClearedDisposable(this)
+    private val disposables = AutoClearedDisposable(this)
 
-    internal val viewDisposables
+    private val viewDisposables
             = AutoClearedDisposable(lifecycleOwner = this, alwaysClearOnStop = false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
