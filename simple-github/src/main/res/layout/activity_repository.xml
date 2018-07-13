@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,109 +10,136 @@
     android:paddingRight="8dp"
     android:paddingTop="12dp">
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/llActivityRepositoryContent"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="?android:listDivider"
-        android:orientation="vertical"
-        android:showDividers="middle">
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/ivActivityRepositoryProfile"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                tools:src="@drawable/ic_launcher_background" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_launcher_background"
+                tools:ignore="VectorDrawableCompat" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+                android:layout_marginBottom="12dp"
                 android:layout_marginLeft="12dp"
-                android:layout_marginRight="12dp"
-                android:layout_toEndOf="@+id/ivActivityRepositoryProfile"
-                android:layout_toRightOf="@id/ivActivityRepositoryProfile"
-
-                android:orientation="vertical">
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ivActivityRepositoryProfile"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
                     android:id="@+id/tvActivityRepositoryName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
-                    android:maxLines="2"
-                    android:textAppearance="?android:textAppearanceLarge"
+                    android:text="username/myrepository"
                     android:textColor="@color/githubBlue"
-                    tools:text="username/myrepository" />
+                    android:textAppearance="@android:style/TextAppearance.Large"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tvActivityRepositoryStars"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
                     android:drawableLeft="@drawable/ic_star_black"
                     android:drawableStart="@drawable/ic_star_black"
-                    android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/githubBlack"
-                    tools:text="100 Stars" />
-            </LinearLayout>
+                    android:text="100 Stars"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvActivityRepositoryName" />
+            </android.support.constraint.ConstraintLayout>
 
-        </RelativeLayout>
+        </android.support.constraint.ConstraintLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/constraintLayout2"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingBottom="12dp"
-            android:paddingTop="12dp">
+            android:paddingTop="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
             <ImageView
                 android:id="@+id/ivActivityRepositoryDescription"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_centerVertical="true"
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
-                android:src="@drawable/ic_description_black"
-                android:tint="@color/gray" />
+                android:tint="@color/gray"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_description_black" />
 
             <TextView
                 android:id="@+id/tvActivityRepositoryDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="60dp"
-                android:layout_marginStart="60dp"
+                android:layout_marginStart="8dp"
+                android:text="My Description"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                tools:text="My Description" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvActivityRepositoryDescription"
                 android:layout_marginLeft="60dp"
-                android:layout_marginStart="60dp"
-                android:text="@string/description"
-                android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
-        </RelativeLayout>
+                android:layout_marginStart="8dp"
+                android:text="Description"
+                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvActivityRepositoryDescription" />
+        </android.support.constraint.ConstraintLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/constraintLayout3"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingBottom="12dp"
-            android:paddingTop="12dp">
+            android:paddingTop="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
 
             <ImageView
                 android:id="@+id/ivActivityRepositoryLanguage"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_centerVertical="true"
                 android:layout_marginLeft="16dp"
-                android:layout_marginStart="16dp"
-                android:src="@drawable/ic_language_black"
-                android:tint="@color/gray" />
+                android:layout_marginStart="8dp"
+                android:tint="@color/gray"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_language_black" />
 
             <TextView
                 android:id="@+id/tvActivityRepositoryLanguage"
@@ -118,71 +147,87 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="60dp"
                 android:layout_marginStart="60dp"
+                android:text="Kotlin"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                tools:text="Kotlin" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvActivityRepositoryLanguage"
                 android:layout_marginLeft="60dp"
                 android:layout_marginStart="60dp"
-                android:text="@string/language"
-                android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
-        </RelativeLayout>
+                android:text="Language"
+                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvActivityRepositoryLanguage" />
+        </android.support.constraint.ConstraintLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingBottom="12dp"
-            android:paddingTop="12dp">
+            android:paddingTop="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
 
             <ImageView
                 android:id="@+id/ivActivityRepositoryLastUpdate"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_centerVertical="true"
                 android:layout_marginLeft="16dp"
-                android:layout_marginStart="16dp"
-                android:src="@drawable/ic_update_black"
-                android:tint="@color/gray" />
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_update_black" />
 
             <TextView
                 android:id="@+id/tvActivityRepositoryLastUpdate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="60dp"
-                android:layout_marginStart="60dp"
+                android:layout_marginStart="8dp"
+                android:text="yyyy/MM/dd"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                tools:text="yyyy/MM/dd" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvActivityRepositoryLastUpdate"
                 android:layout_marginLeft="60dp"
-                android:layout_marginStart="60dp"
-                android:text="@string/last_update"
-                android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
-        </RelativeLayout>
+                android:layout_marginStart="8dp"
+                android:text="Last update"
+                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvActivityRepositoryLastUpdate" />
+        </android.support.constraint.ConstraintLayout>
 
-    </LinearLayout>
+        <ProgressBar
+            android:id="@+id/pbActivityRepository"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ProgressBar
-        android:id="@+id/pbActivityRepository"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone" />
-
-    <TextView
-        android:id="@+id/tvActivityRepositoryMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/githubBlack" />
-
-</RelativeLayout>
+        <TextView
+            android:id="@+id/tvActivityRepositoryMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_search_result"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+</android.support.constraint.ConstraintLayout>
