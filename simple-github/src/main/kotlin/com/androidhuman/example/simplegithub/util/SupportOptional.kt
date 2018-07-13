@@ -7,7 +7,6 @@ sealed class SupportOptional<out T : Any>(private val _value: T?) {
 
     val value: T
         get() = checkNotNull(_value)
-    
 }
 
 class Empty<out T : Any> : SupportOptional<T>(null)
