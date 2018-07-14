@@ -3,115 +3,87 @@ package com.androidhuman.example.simplegithub.ui.repo
 import android.os.Bundle
 import android.view.View
 import com.androidhuman.example.simplegithub.R
+import com.androidhuman.example.simplegithub.data.model.GithubRepo
 import com.androidhuman.example.simplegithub.databinding.ActivityRepositoryBinding
-import com.androidhuman.example.simplegithub.extensions.plusAssign
-import com.androidhuman.example.simplegithub.rx.AutoClearedDisposable
+import com.androidhuman.example.simplegithub.extensions.gone
+import com.androidhuman.example.simplegithub.extensions.visible
 import com.androidhuman.example.simplegithub.ui.base.BaseActivity
+import com.androidhuman.example.simplegithub.util.State
 import com.bumptech.glide.Glide
-import dagger.android.AndroidInjection
-import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.activity_repository.*
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 class RepositoryActivity:
         BaseActivity<ActivityRepositoryBinding, RepositoryViewModel>(R.layout.activity_repository) {
 
-    internal val disposables = AutoClearedDisposable(this)
-
-    internal val viewDisposables
-            = AutoClearedDisposable(lifecycleOwner = this, alwaysClearOnStop = false)
-
-    internal val dateFormatInResponse = SimpleDateFormat(
+    private val dateFormatInResponse = SimpleDateFormat(
             "yyyy-MM-dd'T'HH:mm:ssX", Locale.getDefault())
 
-    internal val dateFormatToShow = SimpleDateFormat(
+    private val dateFormatToShow = SimpleDateFormat(
             "yyyy-MM-dd HH:mm:ss", Locale.getDefault())
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_repository)
 
-        lifecycle += disposables
-        lifecycle += viewDisposables
+        val login = intent.getStringExtra(KEY_USER_LOGIN)
+                ?: throw IllegalArgumentException("No login info exists in extras")
 
-        viewDisposables += viewModel.repository
-                .filter { !it.isEmpty }
-                .map { it.value }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { repository ->
-                    Glide.with(this@RepositoryActivity)
-                            .load(repository.owner.avatarUrl)
-                            .into(ivActivityRepositoryProfile)
+        val repo = intent.getStringExtra(KEY_REPO_NAME)
+                ?: throw IllegalArgumentException("No repo info exists in extras")
 
-                    tvActivityRepositoryName.text = repository.fullName
-                    tvActivityRepositoryStars.text = resources
-                            .getQuantityString(R.plurals.star, repository.stars, repository.stars)
-                    if (null == repository.description) {
-                        tvActivityRepositoryDescription.setText(R.string.no_description_provided)
-                    } else {
-                        tvActivityRepositoryDescription.text = repository.description
-                    }
-                    if (null == repository.language) {
-                        tvActivityRepositoryLanguage.setText(R.string.no_language_specified)
-                    } else {
-                        tvActivityRepositoryLanguage.text = repository.language
-                    }
+        viewModel.requestRepositoryInfo(login, repo)
 
-                    try {
-                        val lastUpdate = dateFormatInResponse.parse(repository.updatedAt)
-                        tvActivityRepositoryLastUpdate.text = dateFormatToShow.format(lastUpdate)
-                    } catch (e: ParseException) {
-                        tvActivityRepositoryLastUpdate.text = getString(R.string.unknown)
-                    }
-                }
-
-        viewDisposables += viewModel.message
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { message -> showError(message) }
-
-        viewDisposables += viewModel.isContentVisible
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { visible -> setContentVisibility(visible) }
-
-        viewDisposables += viewModel.isLoading
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { isLoading ->
-                    if (isLoading) {
-                        showProgress()
-                    } else {
-                        hideProgress()
-                    }
-                }
-
-        val login = intent.getStringExtra(KEY_USER_LOGIN) ?: throw IllegalArgumentException(
-                "No login info exists in extras")
-        val repo = intent.getStringExtra(KEY_REPO_NAME) ?: throw IllegalArgumentException(
-                "No repo info exists in extras")
-
-        disposables += viewModel.requestRepositoryInfo(login, repo)
+        viewModel.state.observe(this, android.arch.lifecycle.Observer {
+            when(it) {
+                is State.Init -> { hideProgress() }
+                is State.Loading -> { showProgress() }
+                is State.Success -> { bindRepository(it.data) }
+                is State.Error -> { showError(it.message) }
+            }
+        })
     }
 
-    private fun showProgress() {
-        pbActivityRepository.visibility = View.VISIBLE
+    private fun bindRepository(repository: GithubRepo) {
+        with(mBinding) {
+            Glide.with(this@RepositoryActivity)
+                    .load(repository.owner.avatarUrl)
+                    .into(ivActivityRepositoryProfile)
+
+            tvActivityRepositoryName.text = repository.fullName
+            tvActivityRepositoryStars.text = resources.getQuantityString(R.plurals.star, repository.stars, repository.stars)
+
+            if (null == repository.description) {
+                tvActivityRepositoryDescription.setText(R.string.no_description_provided)
+            } else {
+                tvActivityRepositoryDescription.text = repository.description
+            }
+
+            if (null == repository.language) {
+                tvActivityRepositoryLanguage.setText(R.string.no_language_specified)
+            } else {
+                tvActivityRepositoryLanguage.text = repository.language
+            }
+
+            try {
+                val lastUpdate = dateFormatInResponse.parse(repository.updatedAt)
+                tvActivityRepositoryLastUpdate.text = dateFormatToShow.format(lastUpdate)
+            } catch (e: ParseException) {
+                tvActivityRepositoryLastUpdate.text = getString(R.string.unknown)
+            }
+        }
     }
 
-    private fun hideProgress() {
-        pbActivityRepository.visibility = View.GONE
-    }
+    private fun showProgress() = mBinding.pbActivityRepository.visible()
 
-    private fun setContentVisibility(show: Boolean) {
-        llActivityRepositoryContent.visibility = if (show) View.VISIBLE else View.GONE
-    }
+    private fun hideProgress() = mBinding.pbActivityRepository.gone()
 
-    private fun showError(message: String) {
-        with(tvActivityRepositoryMessage) {
+    private fun showError(message: String)
+        = with(mBinding.tvActivityRepositoryMessage) {
             text = message
             visibility = View.VISIBLE
         }
-    }
 
     companion object {
 

@@ -12,7 +12,8 @@ import javax.inject.Named
 @Module(includes = [AdapterModule::class])
 abstract class MainModule {
 
-    @Binds @ActivityScope @Named("MainActivityContext")
+    @Binds @ActivityScope
+    @Named("MainActivityContext")
     abstract fun provideContext(mainActivity: MainActivity): Context
 
     @Binds @ActivityScope
@@ -22,7 +23,6 @@ abstract class MainModule {
 @Module
 class AdapterModule {
 
-    @Provides
-    @ActivityScope
+    @Provides @ActivityScope
     fun provideSearchAdapter(@Named("MainActivityContext") context : Context): SearchAdapter = SearchAdapter(context)
 }

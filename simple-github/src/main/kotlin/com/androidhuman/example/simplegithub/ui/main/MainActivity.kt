@@ -37,6 +37,7 @@ class MainActivity:
             }
         })
 
+        // mBinding.btnActivityMainSearch.onClick { startActivity<SearchActivity>() }
         mBinding.btnActivityMainSearch.setOnClickListener {
             startActivity<SearchActivity>()
         }

@@ -1,37 +1,32 @@
 package com.androidhuman.example.simplegithub.ui.search
 
+import android.arch.lifecycle.MutableLiveData
 import com.androidhuman.example.simplegithub.data.local.SearchHistoryDao
 import com.androidhuman.example.simplegithub.data.model.GithubRepo
 import com.androidhuman.example.simplegithub.data.remote.GithubApi
-import com.androidhuman.example.simplegithub.extensions.runOnIoScheduler
-import com.androidhuman.example.simplegithub.ui.base.BaseViewModel
-import com.androidhuman.example.simplegithub.util.SupportOptional
-import com.androidhuman.example.simplegithub.util.emptyOptional
-import com.androidhuman.example.simplegithub.util.optionalOf
+import com.androidhuman.example.simplegithub.data.repository.RepoRepository
+import com.androidhuman.example.simplegithub.ui.base.RxBaseViewModel
+import com.androidhuman.example.simplegithub.util.State
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.schedulers.Schedulers
 
 class SearchViewModel constructor(
+        private val repository: RepoRepository,
         private val api: GithubApi,
         private val searchHistoryDao: SearchHistoryDao
-) : BaseViewModel() {
+) : RxBaseViewModel() {
 
-    val searchResult: BehaviorSubject<SupportOptional<List<GithubRepo>>>
-            = BehaviorSubject.createDefault(emptyOptional())
+    val state: MutableLiveData<State<List<GithubRepo>>> = MutableLiveData()
 
-    val lastSearchKeyword: BehaviorSubject<SupportOptional<String>>
-            = BehaviorSubject.createDefault(emptyOptional())
+    val lastSearchKeyword: MutableLiveData<String> = MutableLiveData()
 
-    val message: BehaviorSubject<SupportOptional<String>> = BehaviorSubject.create()
-
-    val isLoading: BehaviorSubject<Boolean>
-            = BehaviorSubject.createDefault(false)
-
-    fun searchRepository(query: String): Disposable
-            = api.searchRepository(query)
-            .doOnNext { lastSearchKeyword.onNext(optionalOf(query)) }
+    fun searchRepository(query: String)
+            = repository.searchRepository(query)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe { state.value = State.Loading() }
+            .doOnNext { lastSearchKeyword.value = query }
             .flatMap {
                 if (0 == it.totalCount) {
                     Observable.error(IllegalStateException("No search result"))
@@ -39,19 +34,17 @@ class SearchViewModel constructor(
                     Observable.just(it.items)
                 }
             }
-            .doOnSubscribe {
-                searchResult.onNext(emptyOptional())
-                message.onNext(emptyOptional())
-                isLoading.onNext(true)
-            }
-            .doOnTerminate { isLoading.onNext(false) }
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ items ->
-                searchResult.onNext(optionalOf(items))
-            }) {
-                message.onNext(optionalOf(it.message ?: "Unexpected error"))
-            }
+            .doOnTerminate { state.value = State.Init() }
+            .subscribe({
+                state.value = State.Success(it)
+            }, {
+                state.value = State.Error(it.message ?: "Unexpected error")
+            })
+            .let { mDisposable.add(it) }
 
-    fun addToSearchHistory(repository: GithubRepo): Disposable
-            = runOnIoScheduler { searchHistoryDao.add(repository) }
+    fun addToSearchHistory(repo: GithubRepo)
+            = repository.add(repo)
+            .subscribeOn(Schedulers.io())
+            .subscribe()
+            .let { mDisposable.add(it) }
 }

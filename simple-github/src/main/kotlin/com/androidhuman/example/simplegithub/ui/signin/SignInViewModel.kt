@@ -1,45 +1,41 @@
 package com.androidhuman.example.simplegithub.ui.signin
 
+import android.arch.lifecycle.MutableLiveData
 import com.androidhuman.example.simplegithub.data.local.AuthTokenProvider
 import com.androidhuman.example.simplegithub.data.remote.AuthApi
-import com.androidhuman.example.simplegithub.ui.base.BaseViewModel
+import com.androidhuman.example.simplegithub.ui.base.RxBaseViewModel
+import com.androidhuman.example.simplegithub.util.State
 import com.androidhuman.example.simplegithub.util.SupportOptional
 import com.androidhuman.example.simplegithub.util.optionalOf
 import io.reactivex.Single
-import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.PublishSubject
 
 class SignInViewModel constructor(
         private val api: AuthApi,
         private val authTokenProvider: AuthTokenProvider
-) : BaseViewModel() {
+) : RxBaseViewModel() {
 
-    val accessToken: BehaviorSubject<SupportOptional<String>> = BehaviorSubject.create()
+    val state: MutableLiveData<State<String>> = MutableLiveData()
 
-    val message: PublishSubject<String> = PublishSubject.create()
-
-    val isLoading: BehaviorSubject<Boolean>
-            = BehaviorSubject.createDefault(false)
-
-    fun loadAccessToken(): Disposable
+    fun loadAccessToken()
             = Single.fromCallable { optionalOf(authTokenProvider.token) }
             .subscribeOn(Schedulers.io())
             .subscribe(Consumer<SupportOptional<String>> {
-                accessToken.onNext(it)
+                state.value = State.Success(it.value)
             })
+            .let { mDisposable.add(it) }
 
-    fun requestAccessToken(clientId: String, clientSecret: String, code: String): Disposable
+    fun requestAccessToken(clientId: String, clientSecret: String, code: String)
             = api.getAccessToken(clientId, clientSecret, code)
             .map { it.accessToken }
-            .doOnSubscribe { isLoading.onNext(true) }
-            .doOnTerminate { isLoading.onNext(false) }
+            .doOnSubscribe { state.value = State.Loading() }
+            .doOnTerminate { state.value = State.Init() }
             .subscribe({ token ->
                 authTokenProvider.updateToken(token)
-                accessToken.onNext(optionalOf(token))
-            }) {
-                message.onNext(it.message ?: "Unexpected error")
-            }
+                state.value = State.Success(token)
+            }, {
+                state.value = State.Error(it.message ?: "Unexpected error")
+            })
+            .let { mDisposable.add(it) }
 }

@@ -1,19 +1,19 @@
 package com.androidhuman.example.simplegithub.ui.signin
 
+import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.customtabs.CustomTabsIntent
-import android.view.View
 import com.androidhuman.example.simplegithub.BuildConfig
 import com.androidhuman.example.simplegithub.R
 import com.androidhuman.example.simplegithub.databinding.ActivitySignInBinding
-import com.androidhuman.example.simplegithub.extensions.plusAssign
-import com.androidhuman.example.simplegithub.rx.AutoClearedDisposable
+import com.androidhuman.example.simplegithub.extensions.gone
+import com.androidhuman.example.simplegithub.extensions.onClick
+import com.androidhuman.example.simplegithub.extensions.visible
 import com.androidhuman.example.simplegithub.ui.base.BaseActivity
 import com.androidhuman.example.simplegithub.ui.main.MainActivity
-import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.synthetic.main.activity_sign_in.*
+import com.androidhuman.example.simplegithub.util.State
 import org.jetbrains.anko.clearTask
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.longToast
@@ -22,18 +22,10 @@ import org.jetbrains.anko.newTask
 class SignInActivity:
         BaseActivity<ActivitySignInBinding, SignInViewModel>(R.layout.activity_sign_in) {
     
-    internal val disposables = AutoClearedDisposable(this)
-
-    internal val viewDisposables
-            = AutoClearedDisposable(lifecycleOwner = this, alwaysClearOnStop = false)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        lifecycle += disposables // lifecycle.plusAssign(disposables)
-        lifecycle += viewDisposables
-
-        btnActivitySignInStart.setOnClickListener {
+        mBinding.btnActivitySignInStart.onClick {
             val authUri = Uri.Builder().scheme("https").authority("github.com")
                     .appendPath("login")
                     .appendPath("oauth")
@@ -45,32 +37,20 @@ class SignInActivity:
             intent.launchUrl(this@SignInActivity, authUri)
         }
 
-        viewDisposables += viewModel.accessToken
-                .filter { !it.isEmpty }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { launchMainActivity() }
+        viewModel.state.observe(this, Observer {
+            when(it) {
+                is State.Init -> { hideProgress() }
+                is State.Loading -> { showProgress() }
+                is State.Success -> { if(it.data.isNotBlank()) launchMainActivity() }
+                is State.Error -> { showError(it.message) }
+            }
+        })
 
-        viewDisposables += viewModel.message
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { message -> showError(message) }
-
-        viewDisposables += viewModel.isLoading
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { isLoading ->
-                    if (isLoading) {
-                        showProgress()
-                    } else {
-                        hideProgress()
-                    }
-                }
-
-        disposables += viewModel.loadAccessToken()
+        viewModel.loadAccessToken()
     }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-
-        showProgress()
 
         val code = intent.data?.getQueryParameter("code")
                 ?: throw IllegalStateException("No code exists")
@@ -78,19 +58,18 @@ class SignInActivity:
         getAccessToken(code)
     }
 
-    private fun getAccessToken(code: String) {
-        disposables += viewModel.requestAccessToken(
-                BuildConfig.GITHUB_CLIENT_ID, BuildConfig.GITHUB_CLIENT_SECRET, code)
-    }
+    private fun getAccessToken(code: String)
+            = viewModel.requestAccessToken(BuildConfig.GITHUB_CLIENT_ID, BuildConfig.GITHUB_CLIENT_SECRET, code)
+
 
     private fun showProgress() {
-        btnActivitySignInStart.visibility = View.GONE
-        pbActivitySignIn.visibility = View.VISIBLE
+        mBinding.btnActivitySignInStart.gone()
+        mBinding.pbActivitySignIn.visible()
     }
 
     private fun hideProgress() {
-        btnActivitySignInStart.visibility = View.VISIBLE
-        pbActivitySignIn.visibility = View.GONE
+        mBinding.btnActivitySignInStart.visible()
+        mBinding.pbActivitySignIn.gone()
     }
 
     private fun showError(message: String) {
