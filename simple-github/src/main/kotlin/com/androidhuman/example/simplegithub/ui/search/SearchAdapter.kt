@@ -1,5 +1,6 @@
 package com.androidhuman.example.simplegithub.ui.search
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.support.v7.widget.RecyclerView
@@ -10,14 +11,17 @@ import com.androidhuman.example.simplegithub.R
 import com.androidhuman.example.simplegithub.data.model.GithubRepo
 import com.androidhuman.example.simplegithub.ui.GlideApp
 import kotlinx.android.synthetic.main.item_repository.view.*
+import javax.inject.Inject
 
-class SearchAdapter : RecyclerView.Adapter<SearchAdapter.RepositoryHolder>() {
+class SearchAdapter @Inject constructor(
+        context: Context
+) : RecyclerView.Adapter<SearchAdapter.RepositoryHolder>() {
 
     private var items: MutableList<GithubRepo> = mutableListOf()
 
     private val placeholder = ColorDrawable(Color.GRAY)
 
-    private var listener: ItemClickListener? = null
+    private val listener: ItemClickListener? = context as? ItemClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)
             = RepositoryHolder(parent)
@@ -45,10 +49,6 @@ class SearchAdapter : RecyclerView.Adapter<SearchAdapter.RepositoryHolder>() {
 
     fun setItems(items: List<GithubRepo>) {
         this.items = items.toMutableList()
-    }
-
-    fun setItemClickListener(listener: ItemClickListener?) {
-        this.listener = listener
     }
 
     fun clearItems() {

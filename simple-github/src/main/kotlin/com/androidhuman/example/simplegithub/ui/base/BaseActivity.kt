@@ -21,14 +21,12 @@ abstract class BaseActivity<DB : ViewDataBinding, VM : BaseViewModel> (
 
     lateinit var viewModel : VM
 
-    abstract val modelClass : Class<VM>
-
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         mBinding = DataBindingUtil.setContentView(this, layoutResID)
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory)[modelClass]
+        viewModel = ViewModelProviders.of(this, viewModelFactory)[viewModel::class.java]
 
         lifecycle += viewModel
     }

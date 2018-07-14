@@ -17,12 +17,9 @@ import com.androidhuman.example.simplegithub.util.State
 import org.jetbrains.anko.startActivity
 import javax.inject.Inject
 
-class MainActivity :
+class MainActivity:
         BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.activity_main),
         SearchAdapter.ItemClickListener {
-
-    override val modelClass: Class<MainViewModel>
-        get() = MainViewModel::class.java
 
     @Inject lateinit var mAdapter: SearchAdapter
 
@@ -46,7 +43,7 @@ class MainActivity :
 
         with(mBinding.rvActivityMainList) {
             layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = mAdapter.apply { setItemClickListener(this@MainActivity) }
+            adapter = mAdapter
         }
     }
 

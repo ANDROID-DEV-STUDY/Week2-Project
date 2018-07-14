@@ -19,11 +19,9 @@ import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.newTask
 
-class SignInActivity : BaseActivity<ActivitySignInBinding, SignInViewModel>(R.layout.activity_sign_in) {
-
-    override val modelClass: Class<SignInViewModel>
-        get() = SignInViewModel::class.java
-
+class SignInActivity:
+        BaseActivity<ActivitySignInBinding, SignInViewModel>(R.layout.activity_sign_in) {
+    
     internal val disposables = AutoClearedDisposable(this)
 
     internal val viewDisposables

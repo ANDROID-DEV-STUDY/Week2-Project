@@ -15,10 +15,8 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class RepositoryActivity : BaseActivity<ActivityRepositoryBinding, RepositoryViewModel>(R.layout.activity_repository) {
-
-    override val modelClass: Class<RepositoryViewModel>
-        get() = RepositoryViewModel::class.java
+class RepositoryActivity:
+        BaseActivity<ActivityRepositoryBinding, RepositoryViewModel>(R.layout.activity_repository) {
 
     internal val disposables = AutoClearedDisposable(this)
 

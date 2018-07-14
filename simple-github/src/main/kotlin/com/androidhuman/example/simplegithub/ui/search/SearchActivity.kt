@@ -18,20 +18,15 @@ import com.jakewharton.rxbinding2.support.v7.widget.queryTextChangeEvents
 import io.reactivex.android.schedulers.AndroidSchedulers
 import org.jetbrains.anko.startActivity
 
-class SearchActivity
-    : BaseActivity<ActivitySearchBinding, SearchViewModel>(R.layout.activity_search),
+class SearchActivity:
+        BaseActivity<ActivitySearchBinding, SearchViewModel>(R.layout.activity_search),
         SearchAdapter.ItemClickListener {
-
-    override val modelClass: Class<SearchViewModel>
-        get() = SearchViewModel::class.java
 
     private lateinit var menuSearch: MenuItem
 
     private lateinit var searchView: SearchView
 
-    private val adapter by lazy {
-        SearchAdapter().apply { setItemClickListener(this@SearchActivity) }
-    }
+    private val adapter by lazy { SearchAdapter(this) }
 
     private val disposables = AutoClearedDisposable(this)
 

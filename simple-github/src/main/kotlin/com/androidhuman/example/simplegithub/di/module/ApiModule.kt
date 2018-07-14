@@ -1,10 +1,10 @@
 package com.androidhuman.example.simplegithub.di.module
 
 import android.content.Context
+import com.androidhuman.example.simplegithub.data.local.AuthTokenProvider
 import com.androidhuman.example.simplegithub.data.remote.AuthApi
 import com.androidhuman.example.simplegithub.data.remote.AuthInterceptor
 import com.androidhuman.example.simplegithub.data.remote.GithubApi
-import com.androidhuman.example.simplegithub.data.local.AuthTokenProvider
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
