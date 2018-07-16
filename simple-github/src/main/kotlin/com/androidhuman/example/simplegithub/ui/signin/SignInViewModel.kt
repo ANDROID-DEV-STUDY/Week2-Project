@@ -39,7 +39,7 @@ class SignInViewModel(
             .subscribe({ token ->
                 authTokenProvider.updateToken(token)
                 accessToken.onNext(optionalOf(token))
-            }) {
+            }, {
                 message.onNext(it.message ?: "Unexpected error")
-            }
+            })
 }
