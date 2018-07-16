@@ -10,7 +10,6 @@ import android.view.View
 import com.androidhuman.example.simplegithub.R
 import com.androidhuman.example.simplegithub.api.model.GithubRepo
 import com.androidhuman.example.simplegithub.data.SearchHistoryDao
-import com.androidhuman.example.simplegithub.data.provideSearchHistoryDao
 import com.androidhuman.example.simplegithub.extensions.plusAssign
 import com.androidhuman.example.simplegithub.rx.AutoActivatedDisposable
 import com.androidhuman.example.simplegithub.rx.AutoClearedDisposable
