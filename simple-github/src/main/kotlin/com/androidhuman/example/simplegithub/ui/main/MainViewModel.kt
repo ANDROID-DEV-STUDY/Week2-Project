@@ -1,9 +1,9 @@
 package com.androidhuman.example.simplegithub.ui.main
 
 import android.arch.lifecycle.ViewModel
-import com.androidhuman.example.simplegithub.api.model.GithubRepo
-import com.androidhuman.example.simplegithub.data.SearchHistoryDao
-import com.androidhuman.example.simplegithub.extensions.runOnIoScheduler
+import com.androidhuman.example.simplegithub.data.local.dao.SearchHistoryDao
+import com.androidhuman.example.simplegithub.data.local.model.GithubRepoLocalModel
+import com.androidhuman.example.simplegithub.util.extensions.runOnIoScheduler
 import com.androidhuman.example.simplegithub.util.SupportOptional
 import com.androidhuman.example.simplegithub.util.emptyOptional
 import com.androidhuman.example.simplegithub.util.optionalOf
@@ -13,7 +13,7 @@ import io.reactivex.subjects.BehaviorSubject
 
 class MainViewModel(val searchHistoryDao: SearchHistoryDao) : ViewModel() {
 
-    val searchHistory: Flowable<SupportOptional<List<GithubRepo>>>
+    val searchHistory: Flowable<SupportOptional<List<GithubRepoLocalModel>>>
         get() = searchHistoryDao.getHistory()
                 .map { optionalOf(it) }
                 .doOnNext { optional ->

@@ -2,7 +2,6 @@ package com.androidhuman.example.simplegithub.ui.search
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
 import android.view.Menu
@@ -10,11 +9,11 @@ import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.androidhuman.example.simplegithub.R
-import com.androidhuman.example.simplegithub.api.GithubApi
-import com.androidhuman.example.simplegithub.api.model.GithubRepo
-import com.androidhuman.example.simplegithub.data.SearchHistoryDao
-import com.androidhuman.example.simplegithub.extensions.plusAssign
-import com.androidhuman.example.simplegithub.rx.AutoClearedDisposable
+import com.androidhuman.example.simplegithub.data.remote.api.GithubApi
+import com.androidhuman.example.simplegithub.data.remote.model.GithubRepoRemoteModel
+import com.androidhuman.example.simplegithub.data.local.dao.SearchHistoryDao
+import com.androidhuman.example.simplegithub.util.extensions.plusAssign
+import com.androidhuman.example.simplegithub.util.rx.AutoClearedDisposable
 import com.androidhuman.example.simplegithub.ui.repo.RepositoryActivity
 import com.jakewharton.rxbinding2.support.v7.widget.queryTextChangeEvents
 import dagger.android.support.DaggerAppCompatActivity
@@ -132,8 +131,8 @@ class SearchActivity : DaggerAppCompatActivity(), SearchAdapter.ItemClickListene
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onItemClick(repository: GithubRepo) {
-        disposables += viewModel.addToSearchHistory(repository)
+    override fun onItemClick(repository: GithubRepoRemoteModel) {
+//        disposables += viewModel.addToSearchHistory(repository)
         startActivity<RepositoryActivity>(
                 RepositoryActivity.KEY_USER_LOGIN to repository.owner.login,
                 RepositoryActivity.KEY_REPO_NAME to repository.name)

@@ -5,7 +5,7 @@ import com.androidhuman.example.simplegithub.domain.gateway.GitRepoGateway
 import com.androidhuman.example.simplegithub.entity.GithubRepo
 import io.reactivex.Flowable
 
-class GetHistoryRepos(val gateway: GitRepoGateway): UseCaseFlowable<List<GithubRepo>, Void>() {
+class GetHistoryRepos(private val gateway: GitRepoGateway): UseCaseFlowable<List<GithubRepo>, Void>() {
     override fun buildUseCaseFlowable(params: Void?): Flowable<List<GithubRepo>> {
         return gateway.getHistoryRepos()
     }

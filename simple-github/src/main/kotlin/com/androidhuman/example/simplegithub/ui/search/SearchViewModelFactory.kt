@@ -2,8 +2,8 @@ package com.androidhuman.example.simplegithub.ui.search
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import com.androidhuman.example.simplegithub.api.GithubApi
-import com.androidhuman.example.simplegithub.data.SearchHistoryDao
+import com.androidhuman.example.simplegithub.data.remote.api.GithubApi
+import com.androidhuman.example.simplegithub.data.local.dao.SearchHistoryDao
 
 class SearchViewModelFactory(
         val api: GithubApi,

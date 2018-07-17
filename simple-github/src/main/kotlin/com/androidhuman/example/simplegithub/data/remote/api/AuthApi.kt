@@ -1,6 +1,6 @@
-package com.androidhuman.example.simplegithub.api
+package com.androidhuman.example.simplegithub.data.remote.api
 
-import com.androidhuman.example.simplegithub.api.model.GithubAccessToken
+import com.androidhuman.example.simplegithub.data.remote.model.GithubTokenRemoteModel
 import io.reactivex.Observable
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -15,5 +15,5 @@ interface AuthApi {
     fun getAccessToken(
             @Field("client_id") clientId: String,
             @Field("client_secret") clientSecret: String,
-            @Field("code") code: String): Observable<GithubAccessToken>
+            @Field("code") code: String): Observable<GithubTokenRemoteModel>
 }

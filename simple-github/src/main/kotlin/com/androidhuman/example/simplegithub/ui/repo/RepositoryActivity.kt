@@ -2,12 +2,11 @@ package com.androidhuman.example.simplegithub.ui.repo
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.androidhuman.example.simplegithub.R
-import com.androidhuman.example.simplegithub.api.GithubApi
-import com.androidhuman.example.simplegithub.extensions.plusAssign
-import com.androidhuman.example.simplegithub.rx.AutoClearedDisposable
+import com.androidhuman.example.simplegithub.data.remote.api.GithubApi
+import com.androidhuman.example.simplegithub.util.extensions.plusAssign
+import com.androidhuman.example.simplegithub.util.rx.AutoClearedDisposable
 import com.androidhuman.example.simplegithub.ui.GlideApp
 import dagger.android.support.DaggerAppCompatActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -107,7 +106,7 @@ class RepositoryActivity : DaggerAppCompatActivity() {
         val repo = intent.getStringExtra(KEY_REPO_NAME) ?: throw IllegalArgumentException(
                 "No repo info exists in extras")
 
-        disposables += viewModel.requestRepositoryInfo(login, repo)
+//        disposables += viewModel.requestRepositoryInfo(login, repo)
     }
 
     private fun showProgress() {

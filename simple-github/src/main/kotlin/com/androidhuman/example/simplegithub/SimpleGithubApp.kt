@@ -1,6 +1,6 @@
 package com.androidhuman.example.simplegithub
 
-import com.androidhuman.example.simplegithub.di.component.DaggerAppComponent
+import com.androidhuman.example.simplegithub.di.DaggerAppComponent
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerApplication
 

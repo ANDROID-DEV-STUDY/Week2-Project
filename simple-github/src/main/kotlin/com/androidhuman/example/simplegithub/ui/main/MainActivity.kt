@@ -2,23 +2,20 @@ package com.androidhuman.example.simplegithub.ui.main
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.androidhuman.example.simplegithub.R
-import com.androidhuman.example.simplegithub.api.model.GithubRepo
-import com.androidhuman.example.simplegithub.data.SearchHistoryDao
-import com.androidhuman.example.simplegithub.extensions.plusAssign
-import com.androidhuman.example.simplegithub.rx.AutoActivatedDisposable
-import com.androidhuman.example.simplegithub.rx.AutoClearedDisposable
+import com.androidhuman.example.simplegithub.data.remote.model.GithubRepoRemoteModel
+import com.androidhuman.example.simplegithub.data.local.dao.SearchHistoryDao
+import com.androidhuman.example.simplegithub.util.extensions.plusAssign
+import com.androidhuman.example.simplegithub.util.rx.AutoClearedDisposable
 import com.androidhuman.example.simplegithub.ui.repo.RepositoryActivity
 import com.androidhuman.example.simplegithub.ui.search.SearchActivity
 import com.androidhuman.example.simplegithub.ui.search.SearchAdapter
 import dagger.android.support.DaggerAppCompatActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.startActivity
 import javax.inject.Inject
@@ -47,21 +44,21 @@ class MainActivity : DaggerAppCompatActivity(), SearchAdapter.ItemClickListener 
 
         lifecycle += disposables
         lifecycle += viewDisposables
-        lifecycle += AutoActivatedDisposable(this) {
-            viewModel.searchHistory
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { items ->
-                        with(adapter) {
-                            if (items.isEmpty) {
-                                clearItems()
-                            } else {
-                                setItems(items.value)
-                            }
-                            notifyDataSetChanged()
-                        }
-                    }
-        }
+//        lifecycle += AutoActivatedDisposable(this) {
+//            viewModel.searchHistory
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe { items ->
+//                        with(adapter) {
+//                            if (items.isEmpty) {
+//                                clearItems()
+//                            } else {
+//                                setItems(items.value)
+//                            }
+//                            notifyDataSetChanged()
+//                        }
+//                    }
+//        }
 
         btnActivityMainSearch.setOnClickListener {
             startActivity<SearchActivity>()
@@ -96,7 +93,7 @@ class MainActivity : DaggerAppCompatActivity(), SearchAdapter.ItemClickListener 
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onItemClick(repository: GithubRepo) {
+    override fun onItemClick(repository: GithubRepoRemoteModel) {
         startActivity<RepositoryActivity>(
                 RepositoryActivity.KEY_USER_LOGIN to repository.owner.login,
                 RepositoryActivity.KEY_REPO_NAME to repository.name)

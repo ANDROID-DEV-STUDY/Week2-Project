@@ -6,11 +6,11 @@ import com.androidhuman.example.simplegithub.domain.gateway.GitRepoGateway
 import com.androidhuman.example.simplegithub.entity.GithubRepo
 import io.reactivex.Single
 
-class GetRepo(val gateway: GitRepoGateway) : UseCaseSingle<GithubRepo, GetRepo.Params>() {
+class GetRepo(private val gateway: GitRepoGateway) : UseCaseSingle<GithubRepo, GetRepo.Params>() {
 
     override fun buildUseCaseSingle(params: Params?): Single<GithubRepo> {
         params?.let {
-            gateway.getRepo(params.owner, params.repoName)
+            gateway.getRepo(it.owner, it.repoName)
         }.let {
             throw MissingUseCaseParameterException(javaClass)
         }

@@ -8,8 +8,8 @@ import android.support.customtabs.CustomTabsIntent
 import android.view.View
 import com.androidhuman.example.simplegithub.BuildConfig
 import com.androidhuman.example.simplegithub.R
-import com.androidhuman.example.simplegithub.extensions.plusAssign
-import com.androidhuman.example.simplegithub.rx.AutoClearedDisposable
+import com.androidhuman.example.simplegithub.util.extensions.plusAssign
+import com.androidhuman.example.simplegithub.util.rx.AutoClearedDisposable
 import com.androidhuman.example.simplegithub.ui.main.MainActivity
 import dagger.android.support.DaggerAppCompatActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -22,7 +22,7 @@ import javax.inject.Inject
 
 // 실행
 // 1. 객체 주입을 위해 상속을 DaggerAppCompatActivity 로 변경
-// 2. AuthApi 와 AuthTokenProvider 를 대거를 통해 주입받도록 별도의 프로퍼티 선언
+// 2. AuthApi 와 AuthTokenPreference 를 대거를 통해 주입받도록 별도의 프로퍼티 선언
 // 3. 생성한 프로퍼티를 뷰모델 팩토리 생성자의 인자로 전달
 // 4. 뷰모델 펙토리에 직접 inject 받도록 다시 리펙토링
 
@@ -41,7 +41,7 @@ class SignInActivity : DaggerAppCompatActivity() { // 1. DaggerAppCompatActivity
 //    // 2. 별도의 프로퍼티 선언
 //    @Inject lateinit var authApi: AuthApi
 //
-//    @Inject lateinit var tokenProvider: AuthTokenProvider
+//    @Inject lateinit var tokenProvider: AuthTokenPreference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

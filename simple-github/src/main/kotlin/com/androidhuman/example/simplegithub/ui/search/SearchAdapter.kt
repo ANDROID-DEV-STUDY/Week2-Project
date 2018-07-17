@@ -7,13 +7,13 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.androidhuman.example.simplegithub.R
-import com.androidhuman.example.simplegithub.api.model.GithubRepo
+import com.androidhuman.example.simplegithub.data.remote.model.GithubRepoRemoteModel
 import com.androidhuman.example.simplegithub.ui.GlideApp
 import kotlinx.android.synthetic.main.item_repository.view.*
 
 class SearchAdapter : RecyclerView.Adapter<SearchAdapter.RepositoryHolder>() {
 
-    private var items: MutableList<GithubRepo> = mutableListOf()
+    private var items: MutableList<GithubRepoRemoteModel> = mutableListOf()
 
     private val placeholder = ColorDrawable(Color.GRAY)
 
@@ -43,7 +43,7 @@ class SearchAdapter : RecyclerView.Adapter<SearchAdapter.RepositoryHolder>() {
 
     override fun getItemCount() = items.size
 
-    fun setItems(items: List<GithubRepo>) {
+    fun setItems(items: List<GithubRepoRemoteModel>) {
         this.items = items.toMutableList()
     }
 
@@ -61,6 +61,6 @@ class SearchAdapter : RecyclerView.Adapter<SearchAdapter.RepositoryHolder>() {
 
     interface ItemClickListener {
 
-        fun onItemClick(repository: GithubRepo)
+        fun onItemClick(repository: GithubRepoRemoteModel)
     }
 }

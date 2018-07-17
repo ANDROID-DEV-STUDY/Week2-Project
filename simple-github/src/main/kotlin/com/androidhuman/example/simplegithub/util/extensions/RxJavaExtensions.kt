@@ -1,6 +1,6 @@
-package com.androidhuman.example.simplegithub.extensions
+package com.androidhuman.example.simplegithub.util.extensions
 
-import com.androidhuman.example.simplegithub.rx.AutoClearedDisposable
+import com.androidhuman.example.simplegithub.util.rx.AutoClearedDisposable
 import io.reactivex.Completable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers

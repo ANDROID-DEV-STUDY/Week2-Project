@@ -1,4 +1,4 @@
-package com.androidhuman.example.simplegithub.rx
+package com.androidhuman.example.simplegithub.util.rx
 
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver

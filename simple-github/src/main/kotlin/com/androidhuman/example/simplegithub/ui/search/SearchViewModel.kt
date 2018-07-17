@@ -1,10 +1,9 @@
 package com.androidhuman.example.simplegithub.ui.search
 
 import android.arch.lifecycle.ViewModel
-import com.androidhuman.example.simplegithub.api.GithubApi
-import com.androidhuman.example.simplegithub.api.model.GithubRepo
-import com.androidhuman.example.simplegithub.data.SearchHistoryDao
-import com.androidhuman.example.simplegithub.extensions.runOnIoScheduler
+import com.androidhuman.example.simplegithub.data.remote.api.GithubApi
+import com.androidhuman.example.simplegithub.data.remote.model.GithubRepoRemoteModel
+import com.androidhuman.example.simplegithub.data.local.dao.SearchHistoryDao
 import com.androidhuman.example.simplegithub.util.SupportOptional
 import com.androidhuman.example.simplegithub.util.emptyOptional
 import com.androidhuman.example.simplegithub.util.optionalOf
@@ -18,7 +17,7 @@ class SearchViewModel(
         val searchHistoryDao: SearchHistoryDao)
     : ViewModel() {
 
-    val searchResult: BehaviorSubject<SupportOptional<List<GithubRepo>>>
+    val searchResult: BehaviorSubject<SupportOptional<List<GithubRepoRemoteModel>>>
             = BehaviorSubject.createDefault(emptyOptional())
 
     val lastSearchKeyword: BehaviorSubject<SupportOptional<String>>
@@ -52,6 +51,6 @@ class SearchViewModel(
                 message.onNext(optionalOf(it.message ?: "Unexpected error"))
             }
 
-    fun addToSearchHistory(repository: GithubRepo): Disposable
-            = runOnIoScheduler { searchHistoryDao.add(repository) }
+//    fun addToSearchHistory(repository: GithubRepoRemoteModel): Disposable
+//            = runOnIoScheduler { searchHistoryDao.add(repository) }
 }

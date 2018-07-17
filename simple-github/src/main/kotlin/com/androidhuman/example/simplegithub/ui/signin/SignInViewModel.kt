@@ -1,8 +1,8 @@
 package com.androidhuman.example.simplegithub.ui.signin
 
 import android.arch.lifecycle.ViewModel
-import com.androidhuman.example.simplegithub.api.AuthApi
-import com.androidhuman.example.simplegithub.data.AuthTokenProvider
+import com.androidhuman.example.simplegithub.data.remote.api.AuthApi
+import com.androidhuman.example.simplegithub.data.local.sharedpreference.AuthTokenPreference
 import com.androidhuman.example.simplegithub.util.SupportOptional
 import com.androidhuman.example.simplegithub.util.optionalOf
 import io.reactivex.Single
@@ -14,7 +14,7 @@ import io.reactivex.subjects.PublishSubject
 
 class SignInViewModel(
         val api: AuthApi,
-        val authTokenProvider: AuthTokenProvider)
+        val authTokenPreference: AuthTokenPreference)
     : ViewModel() {
 
     val accessToken: BehaviorSubject<SupportOptional<String>> = BehaviorSubject.create()
@@ -25,7 +25,7 @@ class SignInViewModel(
             = BehaviorSubject.createDefault(false)
 
     fun loadAccessToken(): Disposable
-            = Single.fromCallable { optionalOf(authTokenProvider.token) }
+            = Single.fromCallable { optionalOf(authTokenPreference.token) }
             .subscribeOn(Schedulers.io())
             .subscribe(Consumer<SupportOptional<String>> {
                 accessToken.onNext(it)
@@ -37,7 +37,7 @@ class SignInViewModel(
             .doOnSubscribe { isLoading.onNext(true) }
             .doOnTerminate { isLoading.onNext(false) }
             .subscribe({ token ->
-                authTokenProvider.updateToken(token)
+                authTokenPreference.updateToken(token)
                 accessToken.onNext(optionalOf(token))
             }, {
                 message.onNext(it.message ?: "Unexpected error")

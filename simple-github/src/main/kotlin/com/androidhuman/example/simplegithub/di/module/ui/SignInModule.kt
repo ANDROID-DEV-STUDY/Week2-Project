@@ -1,7 +1,7 @@
 package com.androidhuman.example.simplegithub.di.module.ui
 
-import com.androidhuman.example.simplegithub.api.AuthApi
-import com.androidhuman.example.simplegithub.data.AuthTokenProvider
+import com.androidhuman.example.simplegithub.data.remote.api.AuthApi
+import com.androidhuman.example.simplegithub.data.local.sharedpreference.AuthTokenPreference
 import com.androidhuman.example.simplegithub.ui.signin.SignInViewModelFactory
 import dagger.Module
 import dagger.Provides
@@ -10,6 +10,6 @@ import dagger.Provides
 class SignInModule {
     // SignInViewModelFactory 객체 제공
     @Provides
-    fun provideViewModelFactory(authApi: AuthApi, authTokenProvider: AuthTokenProvider) : SignInViewModelFactory
-    = SignInViewModelFactory(authApi, authTokenProvider)
+    fun provideViewModelFactory(authApi: AuthApi, authTokenPreference: AuthTokenPreference) : SignInViewModelFactory
+    = SignInViewModelFactory(authApi, authTokenPreference)
 }

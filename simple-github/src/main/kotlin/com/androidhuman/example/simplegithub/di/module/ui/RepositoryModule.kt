@@ -1,6 +1,6 @@
 package com.androidhuman.example.simplegithub.di.module.ui
 
-import com.androidhuman.example.simplegithub.api.GithubApi
+import com.androidhuman.example.simplegithub.data.remote.api.GithubApi
 import com.androidhuman.example.simplegithub.ui.repo.RepositoryViewModelFactory
 import dagger.Module
 import dagger.Provides

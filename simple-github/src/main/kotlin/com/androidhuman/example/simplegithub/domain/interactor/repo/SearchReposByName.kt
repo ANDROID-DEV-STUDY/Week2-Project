@@ -6,11 +6,11 @@ import com.androidhuman.example.simplegithub.domain.gateway.GitRepoGateway
 import com.androidhuman.example.simplegithub.entity.GithubRepo
 import io.reactivex.Observable
 
-class SearchReposByName(val gateway: GitRepoGateway) : UseCaseObservable<List<GithubRepo>, String>() {
+class SearchReposByName(private val gateway: GitRepoGateway) : UseCaseObservable<List<GithubRepo>, String>() {
 
     override fun buildUseCaseObservable(params: String?): Observable<List<GithubRepo>> {
         params?.let {
-            gateway.searchReposByName(params)
+            gateway.searchReposByName(it)
         }.let {
             throw MissingUseCaseParameterException(javaClass)
         }
