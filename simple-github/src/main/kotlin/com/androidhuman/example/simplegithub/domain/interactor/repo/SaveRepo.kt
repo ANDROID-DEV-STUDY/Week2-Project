@@ -6,15 +6,13 @@ import com.androidhuman.example.simplegithub.domain.gateway.GitRepoGateway
 import com.androidhuman.example.simplegithub.entity.GithubRepo
 import io.reactivex.Completable
 
-class SaveRepo(private val gateway: GitRepoGateway): UseCaseCompletable<SaveRepo.Params>() {
+class SaveRepo(private val gateway: GitRepoGateway): UseCaseCompletable<GithubRepo>() {
 
-    override fun buildUseCaseCompletable(params: Params?): Completable {
+    override fun buildUseCaseCompletable(params: GithubRepo?): Completable {
         params?.let {
-            gateway.saveRepo(it.repo)
+            gateway.saveRepo(it)
         }.let {
             throw MissingUseCaseParameterException(javaClass)
         }
     }
-
-    data class Params(val repo: GithubRepo)
 }

@@ -10,12 +10,11 @@ import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single
 
-class GetAccessTokenByCode(private val gateway: GitAuthGateway) : UseCaseSingle<GithubAccessToken, GetAccessTokenByCode.Params>() {
+class GetAccessTokenByCode(private val gateway: GitAuthGateway) : UseCaseSingle<GithubAccessToken, String>() {
 
-    override fun buildUseCaseSingle(params: Params?): Single<GithubAccessToken> {
-        params?.let { gateway.getAccessTokenByCode(it.code) }
+    override fun buildUseCaseSingle(params: String?): Single<GithubAccessToken> {
+        params?.let { gateway.getAccessTokenByCode(it) }
                 .let { throw MissingUseCaseParameterException(javaClass) }
-    }
 
-    data class Params(val code: String)
+    }
 }
