@@ -1,45 +1,60 @@
 package com.androidhuman.example.simplegithub.ui.signin
 
-import android.arch.lifecycle.ViewModel
-import com.androidhuman.example.simplegithub.data.remote.api.AuthApi
-import com.androidhuman.example.simplegithub.data.local.sharedpreference.AuthTokenPreference
-import com.androidhuman.example.simplegithub.util.SupportOptional
-import com.androidhuman.example.simplegithub.util.optionalOf
-import io.reactivex.Single
-import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Consumer
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.PublishSubject
+import android.arch.lifecycle.MutableLiveData
+import com.androidhuman.example.simplegithub.domain.Schedulers
+import com.androidhuman.example.simplegithub.domain.interactor.auth.GetAccessToken
+import com.androidhuman.example.simplegithub.domain.interactor.auth.GetAccessTokenByCode
+import com.androidhuman.example.simplegithub.entity.GithubAccessToken
+import com.androidhuman.example.simplegithub.ui.base.RxViewModel
+import com.androidhuman.example.simplegithub.ui.scheduler.AppSchedulers
+import com.androidhuman.example.simplegithub.util.State
+import io.reactivex.observers.DisposableMaybeObserver
+import io.reactivex.observers.DisposableSingleObserver
 
 class SignInViewModel(
-        val api: AuthApi,
-        val authTokenPreference: AuthTokenPreference)
-    : ViewModel() {
+        val getAccessToken: GetAccessToken,
+        val getAccessTokenByCode: GetAccessTokenByCode,
+        val schedulers: Schedulers)
+    : RxViewModel() {
 
-    val accessToken: BehaviorSubject<SupportOptional<String>> = BehaviorSubject.create()
+    val state: MutableLiveData<State<String>> = MutableLiveData()
 
-    val message: PublishSubject<String> = PublishSubject.create()
+    fun loadAccessToken() = getAccessToken
+            .execute(null, schedulers, object: DisposableMaybeObserver<GithubAccessToken>() {
 
-    val isLoading: BehaviorSubject<Boolean>
-            = BehaviorSubject.createDefault(false)
+                override fun onSuccess(t: GithubAccessToken) {
+                    state.value = State.Success(t.accessToken)
+                }
 
-    fun loadAccessToken(): Disposable
-            = Single.fromCallable { optionalOf(authTokenPreference.token) }
-            .subscribeOn(Schedulers.io())
-            .subscribe(Consumer<SupportOptional<String>> {
-                accessToken.onNext(it)
+                override fun onComplete() {
+                    state.value = State.Error("Needs Auth in Github")
+                }
+
+                override fun onError(e: Throwable) {
+                    state.value = State.Error(e.message ?: "Unexpected error")
+                }
+
             })
+            .bindUtilDestroy()
 
-    fun requestAccessToken(clientId: String, clientSecret: String, code: String): Disposable
-            = api.getAccessToken(clientId, clientSecret, code)
-            .map { it.accessToken }
-            .doOnSubscribe { isLoading.onNext(true) }
-            .doOnTerminate { isLoading.onNext(false) }
-            .subscribe({ token ->
-                authTokenPreference.updateToken(token)
-                accessToken.onNext(optionalOf(token))
-            }, {
-                message.onNext(it.message ?: "Unexpected error")
+    fun requestAccessToken(code: String) = getAccessTokenByCode
+            .execute(code, schedulers, object: DisposableSingleObserver<GithubAccessToken>() {
+
+                override fun onStart() {
+                    state.value = State.Loading()
+                }
+
+                override fun onSuccess(t: GithubAccessToken) {
+                    state.value = State.Init()
+                    state.value = State.Success(t.accessToken)
+                }
+
+                override fun onError(e: Throwable) {
+                    state.value = State.Init()
+                    state.value = State.Error(e.message ?: "Unexpected error")
+                }
+
             })
+            .bindUtilDestroy()
+
 }
