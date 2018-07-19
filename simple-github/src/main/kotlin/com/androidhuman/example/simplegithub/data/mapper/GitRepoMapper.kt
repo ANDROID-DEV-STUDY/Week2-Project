@@ -22,4 +22,18 @@ class GitRepoMapper {
     fun toEntity(repoRemoteModel: GithubRepoRemoteModel)
             = GithubRepo(repoRemoteModel.name, repoRemoteModel.fullName, toEntity(repoRemoteModel.owner),
             repoRemoteModel.description, repoRemoteModel.language, repoRemoteModel.updatedAt, repoRemoteModel.stars)
+
+    fun toLocal(ownerRemoteModel: GithubOwnerRemoteModel)
+            = GithubOwnerLocalModel(ownerRemoteModel.login, ownerRemoteModel.avatarUrl)
+
+    fun toLocal(repoRemoteModel: GithubRepoRemoteModel)
+            = GithubRepoLocalModel(repoRemoteModel.name, repoRemoteModel.fullName, toLocal(repoRemoteModel.owner),
+            repoRemoteModel.description, repoRemoteModel.language, repoRemoteModel.updatedAt, repoRemoteModel.stars)
+
+    fun toLocal(ownerEntity: GithubOwner)
+            = GithubOwnerLocalModel(ownerEntity.login, ownerEntity.avatarUrl)
+
+    fun toLocal(repoEntity: GithubRepo)
+            = GithubRepoLocalModel(repoEntity.name, repoEntity.fullName, toLocal(repoEntity.owner),
+            repoEntity.description, repoEntity.language, repoEntity.updatedAt, repoEntity.stars)
 }

@@ -13,8 +13,8 @@ abstract class UseCaseObservable<Type, Params> {
             params: Params?,
             schedulers: Schedulers,
             observer: DisposableObserver<Type>,
-            addDisposable: (Disposable) -> Unit
-    ) {
+            addDisposable: (Disposable) -> Unit) {
+
         checkNotNull(observer)
         checkNotNull(addDisposable)
 

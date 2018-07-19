@@ -2,11 +2,9 @@ package com.androidhuman.example.simplegithub.di
 
 import android.app.Application
 import com.androidhuman.example.simplegithub.SimpleGithubApp
-import com.androidhuman.example.simplegithub.data.dagger.ApiModule
-import com.androidhuman.example.simplegithub.data.dagger.DataModule
-import com.androidhuman.example.simplegithub.di.module.AppModule
-import com.androidhuman.example.simplegithub.data.dagger.LocalDataModule
-import com.androidhuman.example.simplegithub.data.dagger.NetworkModule
+import com.androidhuman.example.simplegithub.di.data.DataModule
+import com.androidhuman.example.simplegithub.di.domain.DomainModule
+import com.androidhuman.example.simplegithub.di.presentation.ActivityBinder
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector
@@ -20,6 +18,7 @@ import javax.inject.Singleton
 @Component(modules = [
     AppModule::class,
     DataModule::class,
+    DomainModule::class,
     AndroidSupportInjectionModule::class,
     ActivityBinder::class
 ])

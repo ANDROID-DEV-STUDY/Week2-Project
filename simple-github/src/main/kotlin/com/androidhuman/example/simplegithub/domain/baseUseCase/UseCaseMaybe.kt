@@ -15,8 +15,8 @@ abstract class UseCaseMaybe<Type, Params> {
             params: Params?,
             schedulers: Schedulers,
             observer: DisposableMaybeObserver<Type>,
-            addDisposable: (Disposable) -> Unit
-    ) {
+            addDisposable: (Disposable) -> Unit) {
+
         checkNotNull(observer)
         checkNotNull(addDisposable)
 

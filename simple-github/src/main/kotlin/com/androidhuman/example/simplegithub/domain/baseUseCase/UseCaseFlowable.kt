@@ -9,11 +9,12 @@ abstract class UseCaseFlowable<Type, in Params> {
 
     internal abstract fun buildUseCaseFlowable(params: Params?): Flowable<Type>
 
-    fun execute(params: Params?,
-                schedulers: Schedulers,
-                subscriber : DisposableSubscriber<Type>, // backpresure 를 지원하는 것이 subscriber => 따라서 Flowable 이 subscriber 를 사용함
-                addDisposable: (Disposable) -> Unit
-    ) {
+    fun execute(
+            params: Params?,
+            schedulers: Schedulers,
+            subscriber : DisposableSubscriber<Type>, // backpresure 를 지원하는 것이 subscriber => 따라서 Flowable 이 subscriber 를 사용함
+            addDisposable: (Disposable) -> Unit) {
+
         checkNotNull(addDisposable)
         checkNotNull(subscriber)
 

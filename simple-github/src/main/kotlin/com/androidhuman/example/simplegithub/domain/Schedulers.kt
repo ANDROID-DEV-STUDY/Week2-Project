@@ -4,5 +4,5 @@ import io.reactivex.Scheduler
 
 interface Schedulers {
     val subscribeOn: Scheduler
-    val observeOn: Scheduler
+    val observeOn: Scheduler?
 }

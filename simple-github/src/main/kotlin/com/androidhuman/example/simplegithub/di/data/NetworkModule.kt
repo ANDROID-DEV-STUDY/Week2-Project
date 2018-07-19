@@ -1,4 +1,4 @@
-package com.androidhuman.example.simplegithub.data.dagger
+package com.androidhuman.example.simplegithub.di.data
 
 import com.androidhuman.example.simplegithub.data.remote.api.util.AuthInterceptor
 import com.androidhuman.example.simplegithub.data.local.sharedpreference.AuthTokenPreference

@@ -1,4 +1,4 @@
-package com.androidhuman.example.simplegithub.di.module.ui
+package com.androidhuman.example.simplegithub.di.presentation
 
 import com.androidhuman.example.simplegithub.data.local.dao.SearchHistoryDao
 import com.androidhuman.example.simplegithub.ui.main.MainActivity

@@ -1,4 +1,4 @@
-package com.androidhuman.example.simplegithub.data.dagger
+package com.androidhuman.example.simplegithub.di.data
 
 import com.androidhuman.example.simplegithub.data.remote.api.AuthApi
 import com.androidhuman.example.simplegithub.data.remote.api.GithubApi

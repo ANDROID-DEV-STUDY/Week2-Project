@@ -1,4 +1,4 @@
-package com.androidhuman.example.simplegithub.di.module.ui
+package com.androidhuman.example.simplegithub.di.presentation
 
 import com.androidhuman.example.simplegithub.data.remote.api.AuthApi
 import com.androidhuman.example.simplegithub.data.local.sharedpreference.AuthTokenPreference

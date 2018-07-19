@@ -1,4 +1,4 @@
-package com.androidhuman.example.simplegithub.data.dagger
+package com.androidhuman.example.simplegithub.di.data
 
 import android.arch.persistence.room.Room
 import android.content.Context
