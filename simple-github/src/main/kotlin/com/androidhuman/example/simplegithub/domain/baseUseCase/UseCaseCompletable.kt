@@ -12,26 +12,20 @@ abstract class UseCaseCompletable<in Params> {
     fun execute(
             params: Params?,
             schedulers: Schedulers,
-            observer: DisposableCompletableObserver,
-            addDisposable: (Disposable) -> Unit) {
+            observer: DisposableCompletableObserver): Disposable {
 
-        checkNotNull(addDisposable)
         checkNotNull(observer)
 
         schedulers.observeOn?.let {
-            val disposable: Disposable = buildUseCaseCompletable(params)
+            return buildUseCaseCompletable(params)
                     .subscribeOn(schedulers.subscribeOn)
                     .observeOn(schedulers.observeOn)
                     .subscribeWith(observer)
 
-            addDisposable(disposable)
-
-        }.let{
-            val disposable: Disposable = buildUseCaseCompletable(params)
+        }.let {
+            return buildUseCaseCompletable(params)
                     .subscribeOn(schedulers.subscribeOn)
                     .subscribeWith(observer)
-
-            addDisposable(disposable)
 
         }
     }

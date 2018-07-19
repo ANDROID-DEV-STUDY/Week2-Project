@@ -9,22 +9,18 @@ import io.reactivex.observers.DisposableSingleObserver
 
 abstract class UseCaseMaybe<Type, Params> {
 
-    abstract fun buildUseCaseMaybe(params: Params?) : Maybe<Type>
+    internal abstract fun buildUseCaseMaybe(params: Params?): Maybe<Type>
 
     fun execute(
             params: Params?,
             schedulers: Schedulers,
-            observer: DisposableMaybeObserver<Type>,
-            addDisposable: (Disposable) -> Unit) {
+            observer: DisposableMaybeObserver<Type>): Disposable {
 
         checkNotNull(observer)
-        checkNotNull(addDisposable)
 
-        val disposable : Disposable = buildUseCaseMaybe(params)
+        return buildUseCaseMaybe(params)
                 .subscribeOn(schedulers.subscribeOn)
                 .observeOn(schedulers.observeOn)
                 .subscribeWith(observer)
-
-        addDisposable(disposable)
     }
 }

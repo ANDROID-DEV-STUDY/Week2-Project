@@ -7,22 +7,18 @@ import io.reactivex.observers.DisposableObserver
 
 abstract class UseCaseObservable<Type, Params> {
 
-    abstract fun buildUseCaseObservable(params: Params?): Observable<Type>
+    internal abstract fun buildUseCaseObservable(params: Params?): Observable<Type>
 
     fun execute(
             params: Params?,
             schedulers: Schedulers,
-            observer: DisposableObserver<Type>,
-            addDisposable: (Disposable) -> Unit) {
+            observer: DisposableObserver<Type>): Disposable {
 
         checkNotNull(observer)
-        checkNotNull(addDisposable)
 
-        val disposable: Disposable = buildUseCaseObservable(params)
+        return buildUseCaseObservable(params)
                 .subscribeOn(schedulers.subscribeOn)
                 .observeOn(schedulers.observeOn)
                 .subscribeWith(observer)
-
-        addDisposable(disposable)
     }
 }

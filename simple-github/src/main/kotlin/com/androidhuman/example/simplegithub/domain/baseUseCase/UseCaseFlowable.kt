@@ -12,17 +12,13 @@ abstract class UseCaseFlowable<Type, in Params> {
     fun execute(
             params: Params?,
             schedulers: Schedulers,
-            subscriber : DisposableSubscriber<Type>, // backpresure 를 지원하는 것이 subscriber => 따라서 Flowable 이 subscriber 를 사용함
-            addDisposable: (Disposable) -> Unit) {
+            subscriber: DisposableSubscriber<Type>): Disposable { // backpresure 를 지원하는 것이 subscriber => 따라서 Flowable 이 subscriber 를 사용함
 
-        checkNotNull(addDisposable)
         checkNotNull(subscriber)
 
-        val disposable: Disposable = buildUseCaseFlowable(params)
+        return buildUseCaseFlowable(params)
                 .subscribeOn(schedulers.subscribeOn)
                 .observeOn(schedulers.observeOn)
                 .subscribeWith(subscriber)
-
-        addDisposable(disposable)
     }
 }

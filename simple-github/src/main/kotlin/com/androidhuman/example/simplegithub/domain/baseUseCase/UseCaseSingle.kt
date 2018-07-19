@@ -7,22 +7,18 @@ import io.reactivex.observers.DisposableSingleObserver
 
 abstract class UseCaseSingle<Type, Params> {
 
-    abstract fun buildUseCaseSingle(params: Params?) : Single<Type>
+    internal abstract fun buildUseCaseSingle(params: Params?): Single<Type>
 
     fun execute(
             params: Params?,
             schedulers: Schedulers,
-            observer: DisposableSingleObserver<Type>,
-            addDisposable: (Disposable) -> Unit) {
+            observer: DisposableSingleObserver<Type>): Disposable {
 
         checkNotNull(observer)
-        checkNotNull(addDisposable)
 
-        val disposable : Disposable = buildUseCaseSingle(params)
+        return buildUseCaseSingle(params)
                 .subscribeOn(schedulers.subscribeOn)
                 .observeOn(schedulers.observeOn)
                 .subscribeWith(observer)
-
-        addDisposable(disposable)
     }
 }
