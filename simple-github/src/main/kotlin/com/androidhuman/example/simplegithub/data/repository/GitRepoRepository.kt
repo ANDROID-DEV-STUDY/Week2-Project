@@ -19,7 +19,7 @@ class GitRepoRepository(
     override fun getHistoryRepos(): Flowable<List<GithubRepo>> {
         return gitRepoLocalDataSource.getHistory()
                 .flatMap {
-                    if(0 == it.count()) {
+                    if(it.isEmpty()) {
                         Flowable.error(IllegalStateException("No recent repositories."))
                     } else {
                         Flowable.just( it.map { gitRepoMapper.toEntity(it)} )

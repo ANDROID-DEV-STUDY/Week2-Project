@@ -4,10 +4,10 @@ import com.androidhuman.example.simplegithub.di.presentation.MainModule
 import com.androidhuman.example.simplegithub.di.presentation.RepositoryModule
 import com.androidhuman.example.simplegithub.di.presentation.SearchModule
 import com.androidhuman.example.simplegithub.di.presentation.SignInModule
-import com.androidhuman.example.simplegithub.ui.main.MainActivity
-import com.androidhuman.example.simplegithub.ui.repo.RepositoryActivity
-import com.androidhuman.example.simplegithub.ui.search.SearchActivity
-import com.androidhuman.example.simplegithub.ui.signin.SignInActivity
+import com.androidhuman.example.simplegithub.presentation.main.MainActivity
+import com.androidhuman.example.simplegithub.presentation.repo.RepositoryActivity
+import com.androidhuman.example.simplegithub.presentation.search.SearchActivity
+import com.androidhuman.example.simplegithub.presentation.signin.SignInActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

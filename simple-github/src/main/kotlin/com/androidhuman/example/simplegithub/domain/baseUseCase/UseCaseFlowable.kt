@@ -14,8 +14,6 @@ abstract class UseCaseFlowable<Type, in Params> {
             schedulers: Schedulers,
             subscriber: DisposableSubscriber<Type>): Disposable { // backpresure 를 지원하는 것이 subscriber => 따라서 Flowable 이 subscriber 를 사용함
 
-        checkNotNull(subscriber)
-
         return buildUseCaseFlowable(params)
                 .subscribeOn(schedulers.subscribeOn)
                 .observeOn(schedulers.observeOn)

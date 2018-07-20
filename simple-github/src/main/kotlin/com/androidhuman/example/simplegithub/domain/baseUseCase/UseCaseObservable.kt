@@ -14,8 +14,6 @@ abstract class UseCaseObservable<Type, Params> {
             schedulers: Schedulers,
             observer: DisposableObserver<Type>): Disposable {
 
-        checkNotNull(observer)
-
         return buildUseCaseObservable(params)
                 .subscribeOn(schedulers.subscribeOn)
                 .observeOn(schedulers.observeOn)

@@ -5,8 +5,8 @@ import com.androidhuman.example.simplegithub.data.local.sharedpreference.AuthTok
 import com.androidhuman.example.simplegithub.domain.Schedulers
 import com.androidhuman.example.simplegithub.domain.interactor.auth.GetAccessToken
 import com.androidhuman.example.simplegithub.domain.interactor.auth.GetAccessTokenByCode
-import com.androidhuman.example.simplegithub.ui.scheduler.AppSchedulers
-import com.androidhuman.example.simplegithub.ui.signin.SignInViewModelFactory
+import com.androidhuman.example.simplegithub.presentation.scheduler.AppSchedulers
+import com.androidhuman.example.simplegithub.presentation.signin.SignInViewModelFactory
 import dagger.Module
 import dagger.Provides
 import javax.inject.Named

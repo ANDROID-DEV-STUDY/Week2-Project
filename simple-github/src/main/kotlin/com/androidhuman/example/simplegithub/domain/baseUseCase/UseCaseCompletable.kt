@@ -14,16 +14,14 @@ abstract class UseCaseCompletable<in Params> {
             schedulers: Schedulers,
             observer: DisposableCompletableObserver): Disposable {
 
-        checkNotNull(observer)
-
-        schedulers.observeOn?.let {
-            return buildUseCaseCompletable(params)
+        return if (schedulers.observeOn != null) {
+            buildUseCaseCompletable(params)
                     .subscribeOn(schedulers.subscribeOn)
                     .observeOn(schedulers.observeOn)
                     .subscribeWith(observer)
 
-        }.let {
-            return buildUseCaseCompletable(params)
+        } else {
+            buildUseCaseCompletable(params)
                     .subscribeOn(schedulers.subscribeOn)
                     .subscribeWith(observer)
 

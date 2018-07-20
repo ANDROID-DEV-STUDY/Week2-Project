@@ -3,8 +3,8 @@ package com.androidhuman.example.simplegithub.di
 import android.app.Application
 import android.content.Context
 import com.androidhuman.example.simplegithub.domain.Schedulers
-import com.androidhuman.example.simplegithub.ui.scheduler.AppSchedulers
-import com.androidhuman.example.simplegithub.ui.scheduler.IoSchedulers
+import com.androidhuman.example.simplegithub.presentation.scheduler.AppSchedulers
+import com.androidhuman.example.simplegithub.presentation.scheduler.IoSchedulers
 import dagger.Module
 import dagger.Provides
 import javax.inject.Named

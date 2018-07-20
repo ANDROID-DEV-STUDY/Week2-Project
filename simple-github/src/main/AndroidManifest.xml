@@ -17,11 +17,11 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name=".presentation.main.MainActivity"
             android:label="@string/app_name" />
 
         <activity
-            android:name=".ui.signin.SignInActivity"
+            android:name=".presentation.signin.SignInActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask">
             <intent-filter>
@@ -43,22 +43,22 @@
         </activity>
 
         <activity
-            android:name=".ui.search.SearchActivity"
+            android:name=".presentation.search.SearchActivity"
             android:label="@string/search"
-            android:parentActivityName=".ui.main.MainActivity">
+            android:parentActivityName=".presentation.main.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.androidhuman.example.simplegithub.ui.main.MainActivity" />
+                android:value="com.androidhuman.example.simplegithub.presentation.main.MainActivity" />
         </activity>
 
         <activity
-            android:name=".ui.repo.RepositoryActivity"
+            android:name=".presentation.repo.RepositoryActivity"
             android:label="@string/view_repository"
-            android:parentActivityName=".ui.main.MainActivity">
+            android:parentActivityName=".presentation.main.MainActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.androidhuman.example.simplegithub.ui.main.MainActivity" />
+                android:value="com.androidhuman.example.simplegithub.presentation.main.MainActivity" />
         </activity>
     </application>
 

@@ -9,9 +9,9 @@ import io.reactivex.Observable
 class SearchReposByName(private val gateway: GitRepoGateway) : UseCaseObservable<List<GithubRepo>, String>() {
 
     override fun buildUseCaseObservable(params: String?): Observable<List<GithubRepo>> {
-        params?.let {
-            gateway.searchReposByName(it)
-        }.let {
+        return if(params != null) {
+            gateway.searchReposByName(params)
+        } else {
             throw MissingUseCaseParameterException(javaClass)
         }
     }

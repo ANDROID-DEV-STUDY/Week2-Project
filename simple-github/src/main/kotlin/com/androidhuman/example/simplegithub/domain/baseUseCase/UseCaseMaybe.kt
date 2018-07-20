@@ -16,8 +16,6 @@ abstract class UseCaseMaybe<Type, Params> {
             schedulers: Schedulers,
             observer: DisposableMaybeObserver<Type>): Disposable {
 
-        checkNotNull(observer)
-
         return buildUseCaseMaybe(params)
                 .subscribeOn(schedulers.subscribeOn)
                 .observeOn(schedulers.observeOn)

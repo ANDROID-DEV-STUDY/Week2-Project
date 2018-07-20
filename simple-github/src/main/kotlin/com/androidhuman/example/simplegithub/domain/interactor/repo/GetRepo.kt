@@ -9,10 +9,10 @@ import io.reactivex.Single
 class GetRepo(private val gateway: GitRepoGateway) : UseCaseSingle<GithubRepo, Pair<String, String>>() {
 
     override fun buildUseCaseSingle(params: Pair<String, String>?): Single<GithubRepo> {
-        params?.let {
-            val (owner, repoName) = it
+        return if(params!=null) {
+            val (owner, repoName) = params
             gateway.getRepo(owner, repoName)
-        }.let {
+        } else {
             throw MissingUseCaseParameterException(javaClass)
         }
     }

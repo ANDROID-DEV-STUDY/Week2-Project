@@ -9,9 +9,9 @@ import io.reactivex.Completable
 class SaveRepo(private val gateway: GitRepoGateway): UseCaseCompletable<GithubRepo>() {
 
     override fun buildUseCaseCompletable(params: GithubRepo?): Completable {
-        params?.let {
-            gateway.saveRepo(it)
-        }.let {
+        return if(params!=null) {
+            gateway.saveRepo(params)
+        } else {
             throw MissingUseCaseParameterException(javaClass)
         }
     }
